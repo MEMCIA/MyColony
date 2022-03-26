@@ -16,19 +16,18 @@ interface IField
     public bool IsEmpty();
 }
 
-interface IMove
-{
-    public Vector2Int TargetField { get; }
-}
 
 interface IBoard
 {
     // width & height
     public Vector2Int Dimensions { get; }
 
-    public IField GetField(int x, int y);
+    public IField GetField(Vector2Int position);
     public List<IField> GetAllFields();
 
-    public List<IMove> GetAvailableMovesFor(int x, int y);
+    public List<IField> GetAvailableMovesFor(Vector2Int position);
+
+    // try to place pawn at spe
+    public bool PlacePawnAt(Vector2Int position, int player);
 }
 
