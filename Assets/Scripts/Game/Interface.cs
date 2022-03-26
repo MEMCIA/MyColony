@@ -4,13 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+interface IPawn
+{
+    public int Owner { get; }
+}
+
+
 interface IField
 {
     // position of this field
     public Vector2Int Position { get; }
 
-    // 0 if none, 1 if we have a player 1 pawn here
-    public int PlayerPawn { get; }
+    // Pawn at this place, if any
+    public IPawn Pawn { get; }
 
     // is field emtpy, and can be moved into?
     public bool IsEmpty();
