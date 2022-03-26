@@ -34,6 +34,6 @@ interface IBoard
     public List<IField> GetAvailableMovesFor(Vector2Int position);
 
     // try to place pawn at spe
-    public bool PlacePawnAt(Vector2Int position, int player);
+    public bool PlacePawnAt(Vector2Int position, int owner);
 }
 
