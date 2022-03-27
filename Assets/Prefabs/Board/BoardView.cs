@@ -95,16 +95,20 @@ public class BoardView : MonoBehaviour
 
     void DestroyChildren()
     {
-        while (transform.childCount > 0)
+        // destroy cannot be called from edit mode, we need to call DestroyImmediate
+        if (!Application.isPlaying)
         {
-            var child = transform.GetChild(0);
-            // destroy cannot be called from edit mode, we need to call DestroyImmediate
-            if (!Application.isPlaying)
+            while (transform.childCount > 0)
+            {
+                var child = transform.GetChild(0);
                 DestroyImmediate(child.gameObject);
-            else
-                Destroy(child.gameObject);
+            }
+            return;
+        }
+
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
         }
     }
-
-
 }
