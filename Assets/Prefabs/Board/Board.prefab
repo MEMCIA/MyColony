@@ -43,3 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af8cd7d07674344dab760fe9e8e96b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Field: {fileID: 0}
+  Dimensions: {x: 3, y: 3}
+  DistanceBetweenFields: 1.1
+  FieldsLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  OnFieldClicked:
+    m_PersistentCalls:
+      m_Calls: []

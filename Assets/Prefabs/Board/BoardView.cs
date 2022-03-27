@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 // this code will be also run in the editor, so fields will be created for preview
@@ -11,7 +12,9 @@ public class BoardView : MonoBehaviour
     public FieldView Field;
     public Vector2Int Dimensions = new Vector2Int(3, 3);
     public float DistanceBetweenFields = 1.1f;
+    public LayerMask FieldsLayers = new LayerMask();
 
+    public UnityEvent<Vector2Int> OnFieldClicked = new UnityEvent<Vector2Int>();
 
     // Start is called before the first frame update
     void Start()
@@ -22,9 +25,37 @@ public class BoardView : MonoBehaviour
     void Update()
     {
         if (!Application.isPlaying)
+        {
             CreateFields();
+            return;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            CheckIfClicked();
+        }
     }
 
+
+    void CheckIfClicked()
+    {
+        RaycastHit hit;
+        var camera = Camera.main;
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        int layerMask = 0;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+        {
+            var objectHit = hit.collider.gameObject;
+            var field = objectHit.GetComponent<FieldView>();
+
+            if (!field)
+                return;
+
+            Debug.Log($"Clicked on field {field.Position}");
+            OnFieldClicked.Invoke(field.Position);
+        }
+    }
 
     public void CreateFields()
     {
@@ -43,6 +74,7 @@ public class BoardView : MonoBehaviour
     FieldView CreateField(Vector2Int position)
     {
         var field = Instantiate(Field, transform);
+        field.Position = position;
         field.transform.localPosition = FieldPositionToLocalPosition(position);
         // this object will be not saved as part of the scene
         field.hideFlags = HideFlags.DontSaveInEditor;
