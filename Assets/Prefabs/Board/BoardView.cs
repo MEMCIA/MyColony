@@ -12,7 +12,6 @@ public class BoardView : MonoBehaviour
     public Vector2Int Dimensions = new Vector2Int(3, 3);
     public float DistanceBetweenFields = 1.1f;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +23,6 @@ public class BoardView : MonoBehaviour
         if (!Application.isPlaying)
             CreateFields();
     }
-
 
     public void CreateFields()
     {
