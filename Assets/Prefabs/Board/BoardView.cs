@@ -55,12 +55,15 @@ public class BoardView : MonoBehaviour
         float localWidth = FieldSize * Dimensions.x + DistanceBetweenFields * (Dimensions.x - 1);
         float localHeight = FieldSize * Dimensions.y + DistanceBetweenFields * (Dimensions.y - 1);
 
+        // board should be centerd on (0,0), so lets shift start position by half of board width
         float x_start = -localWidth / 2.0f;
         float y_start = -localHeight / 2.0f;
 
+        // calculate position of each field
         float x = x_start + (FieldSize + DistanceBetweenFields) * position.x;
         float y = y_start + (FieldSize + DistanceBetweenFields) * position.y;
 
+        // add half of field size - now we calculated center of this board field/tile
         x += FieldSize / 2f;
         y += FieldSize / 2f;
 
