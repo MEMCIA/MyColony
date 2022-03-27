@@ -42,9 +42,8 @@ public class BoardView : MonoBehaviour
         RaycastHit hit;
         var camera = Camera.main;
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-        int layerMask = 0;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, FieldsLayers))
         {
             var objectHit = hit.collider.gameObject;
             var field = objectHit.GetComponent<FieldView>();
