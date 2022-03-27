@@ -36,7 +36,6 @@ public class BoardView : MonoBehaviour
         }
     }
 
-
     void CheckIfClicked()
     {
         RaycastHit hit;
