@@ -45,7 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Field: {fileID: 0}
   Dimensions: {x: 3, y: 3}
-  DistanceBetweenFields: 1.1
+  FieldSize: 1
+  DistanceBetweenFields: 0.1
   FieldsLayers:
     serializedVersion: 2
     m_Bits: 64
