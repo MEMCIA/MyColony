@@ -10,7 +10,8 @@ public class BoardView : MonoBehaviour
     // prefab used for each field
     public FieldView Field;
     public Vector2Int Dimensions = new Vector2Int(3, 3);
-    public float DistanceBetweenFields = 1.1f;
+    public float FieldSize = 1.0f;
+    public float DistanceBetweenFields = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -49,11 +50,19 @@ public class BoardView : MonoBehaviour
 
     Vector3 FieldPositionToLocalPosition(Vector2Int position)
     {
-        float x_start = (Dimensions.x - 1) / 2.0f;
-        float y_start = (Dimensions.y - 1) / 2.0f;
+        // point 0,0 should be in center of our field, so let's calculate board size in local space
+        // by summing dimensions of fields and space between them
+        float localWidth = FieldSize * Dimensions.x + DistanceBetweenFields * (Dimensions.x - 1);
+        float localHeight = FieldSize * Dimensions.y + DistanceBetweenFields * (Dimensions.y - 1);
 
-        float x = x_start + position.x * DistanceBetweenFields;
-        float y = y_start + position.y * DistanceBetweenFields;
+        float x_start = -localWidth / 2.0f;
+        float y_start = -localHeight / 2.0f;
+
+        float x = x_start + (FieldSize + DistanceBetweenFields) * position.x;
+        float y = y_start + (FieldSize + DistanceBetweenFields) * position.y;
+
+        x += FieldSize / 2f;
+        y += FieldSize / 2f;
 
         // use x,z coordinates for fields
         return new Vector3(x, 0, y);
