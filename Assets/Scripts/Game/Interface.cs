@@ -4,7 +4,7 @@ using UnityEngine;
 
 interface IPawn
 {
-    public int Owner { get; }
+    public int Owner { get; set; }
 }
 
 
@@ -15,6 +15,7 @@ interface IField
 
     // Pawn at this place, if any
     public IPawn Pawn { get; }
+
 
     // is field emtpy, and can be moved into?
     public bool IsEmpty();
