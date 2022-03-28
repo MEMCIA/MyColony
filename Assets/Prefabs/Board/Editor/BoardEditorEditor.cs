@@ -1,0 +1,43 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+[CustomEditor(typeof(BoardEditor))]
+public class BoardEditorEditor : Editor
+{
+
+	public override void OnInspectorGUI()
+	{
+		DrawDefaultInspector();
+		BoardEditor myTarget = (BoardEditor)target;
+
+		if (GUILayout.Button("Save level"))
+		{
+			var board = myTarget.GetBoard();
+			BoardObject.Save(board);
+		}
+	}
+}
+
+public class LoadLevelAssets
+{
+    [MenuItem("Assets/Load Level")]
+    public static void LoadLevel()
+    {
+        var selection = Selection.activeObject as BoardObject;
+        var board = selection.Load();
+        BoardEditor.CurrentEditor.LoadBoard(board);
+    }
+
+    [MenuItem("Assets/Load Level", true)]
+    public static bool LoadLevelValidation()
+    {
+        return Selection.activeObject as BoardObject && Application.isPlaying;
+    }
+}

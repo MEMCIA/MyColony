@@ -1,3 +1,4 @@
+using Assets.Scripts.Game;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,6 @@ using UnityEngine.Events;
 
 public class BoardView : MonoBehaviour
 {
-    [System.NonSerialized]
-    public IBoard BoardModel;
-
     // prefab used for each field
     public FieldView Field;
     public Vector2Int Dimensions = new Vector2Int(3, 3);
@@ -18,12 +16,18 @@ public class BoardView : MonoBehaviour
     public UnityEvent<IField> OnFieldClicked = new UnityEvent<IField>();
 
     List<FieldView> _fields;
+    protected IBoard _boardModel;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (BoardModel != null)
-            Dimensions = BoardModel.Dimensions;
+        CreateFields();
+    }
+
+    public void SetBoard(Board board)
+    {
+        _boardModel = board;
+        Dimensions = _boardModel.Dimensions;
         CreateFields();
     }
 
@@ -90,7 +94,7 @@ public class BoardView : MonoBehaviour
     FieldView CreateField(Vector2Int position)
     {
         var field = Instantiate(Field, transform);
-        field.BoardModel = BoardModel;
+        field.BoardModel = _boardModel;
         field.Position = position;
         field.transform.localPosition = FieldPositionToLocalPosition(position);
         return field;
