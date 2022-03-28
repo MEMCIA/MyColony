@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class BoardView : MonoBehaviour
 {
     [System.NonSerialized]
-    public IBoard Board;
+    public IBoard BoardModel;
 
     // prefab used for each field
     public FieldView Field;
@@ -24,8 +24,8 @@ public class BoardView : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (Board != null)
-            Dimensions = Board.Dimensions;
+        if (BoardModel != null)
+            Dimensions = BoardModel.Dimensions;
         CreateFields();
     }
 
@@ -92,7 +92,7 @@ public class BoardView : MonoBehaviour
     FieldView CreateField(Vector2Int position)
     {
         var field = Instantiate(Field, transform);
-        field.Board = Board;
+        field.BoardModel = BoardModel;
         field.Position = position;
         field.transform.localPosition = FieldPositionToLocalPosition(position);
         // this object will be not saved as part of the scene

@@ -5,30 +5,30 @@ using UnityEngine;
 public class FieldView : MonoBehaviour
 {
     [System.NonSerialized]
-    public IBoard Board;
+    public IBoard BoardModel;
     [System.NonSerialized]
     public Vector2Int Position;
 
     public GameObject Pawn;
 
-    IField _field;
+    IField _fieldModel;
 
     private void Start()
     {
-        if (Board != null)
-            _field = Board.GetField(Position);
+        if (BoardModel != null)
+            _fieldModel = BoardModel.GetField(Position);
         Refresh();
     }
 
     public void Refresh()
     {
-        if (_field == null)
+        if (_fieldModel == null)
             return;
-        Pawn.SetActive(_field.Pawn != null);
+        Pawn.SetActive(_fieldModel.Pawn != null);
     }
 
     public IField GetField()
     {
-        return _field;
+        return _fieldModel;
     }
 }

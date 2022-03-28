@@ -17,7 +17,7 @@ public class BoardEditor : MonoBehaviour
 
 
         _view = GetComponent<BoardView>();
-        _view.Board = _board;
+        _view.BoardModel = _board;
         _view.OnFieldClicked.AddListener(OnClicked);
     }
 
