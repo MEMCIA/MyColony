@@ -48,6 +48,11 @@ public class BoardEditor : MonoBehaviour
 
         for (int i = 0; i < allFieldsBoard.Count; i++)
         {
+            if(allFieldsBoard[i].Pawn==null)
+            {
+                savefields.Add(new SaveField(SaveField.NoPawn));
+                continue;
+            }
             savefields.Add(new SaveField(allFieldsBoard[i].Pawn.Owner));
         }
 

@@ -32,6 +32,7 @@ namespace Assets.Scripts.Game
     [Serializable]
     class SaveField
     {
+        public const int NoPawn = -1;
         public SaveField(int pawnOwner)
         {
             PawnOwner = pawnOwner;
