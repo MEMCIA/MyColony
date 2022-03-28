@@ -69,7 +69,7 @@ namespace Assets.Scripts.Game
         {
             var field = GetField(position);
             if (field == null) return false;
-            if (field.IsEmpty()) return false;
+            if (!field.IsEmpty()) return false;
             field.Pawn = new Pawn(owner);
             return true;
         }
