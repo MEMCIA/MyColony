@@ -29,7 +29,7 @@ namespace Assets.Scripts.Game
         public IField GetField(Vector2Int position)
         {
             int index = position.y * Dimensions.x + position.x;
-            if (index < 0 || index >+ _allFields.Count) return null;
+            if (index < 0 || index >= _allFields.Count) return null;
             return _allFields[index];
         }
 
