@@ -24,7 +24,7 @@ public class BoardEditorEditor : Editor
                 myTarget.NewBoard();
             }
 
-            if (GUILayout.Button("Save level"))
+            if (GUILayout.Button("Save Level"))
             {
                 var board = myTarget.GetBoard();
                 BoardObject.Save(board);
