@@ -13,7 +13,7 @@ namespace Assets.Scripts.Game
 
         // width & height
         public Vector2Int Dimensions { get; }
-        List<IField> allFields = new List<IField>();
+        List<IField> _allFields = new List<IField>();
 
         public void CreateFields()
         {
@@ -21,21 +21,21 @@ namespace Assets.Scripts.Game
             {
                 for (int j = 0; j < Dimensions.y; j++)
                 {
-                    allFields.Add(new Field(new Vector2Int(i, j)));
+                    _allFields.Add(new Field(new Vector2Int(i, j)));
                 }
             }
         }
 
         public IField GetField(Vector2Int position)
         {
-            int index = position.y * (Dimensions.x) + position.x;
-            if (index < 0 || index > allFields.Count) return null;
-            return allFields[index];
+            int index = position.y * Dimensions.x + position.x;
+            if (index < 0 || index >+ _allFields.Count) return null;
+            return _allFields[index];
         }
 
         public List<IField> GetAllFields()
         {
-            return allFields;
+            return _allFields;
         }
 
         public List<IField> GetAvailableMovesFor(Vector2Int position)
@@ -45,7 +45,7 @@ namespace Assets.Scripts.Game
             foreach (var n in neighborsCoordinates)
             {
                 var field = GetField(n);
-                if (field != null || field.Pawn == null) availableMoves.Add(field);
+                if (field != null || field.IsEmpty()) availableMoves.Add(field);
             }
             return availableMoves;
         }
@@ -69,9 +69,8 @@ namespace Assets.Scripts.Game
         {
             var field = GetField(position);
             if (field == null) return false;
-            if (field.Pawn != null) return false;
+            if (field.IsEmpty()) return false;
             field.Pawn = new Pawn(owner);
-            //tutaj jeszcze mogłabym dopisać dodawanie do listy pionków gracza
             return true;
         }
     }
