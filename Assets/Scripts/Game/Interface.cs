@@ -14,7 +14,7 @@ interface IField
     public Vector2Int Position { get; }
 
     // Pawn at this place, if any
-    public IPawn Pawn { get; }
+    public IPawn Pawn { get; set; }
 
     // is field emtpy, and can be moved into?
     public bool IsEmpty();
