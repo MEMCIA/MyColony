@@ -17,16 +17,20 @@ public class BoardEditorEditor : Editor
 		DrawDefaultInspector();
 		BoardEditor myTarget = (BoardEditor)target;
 
-		if (GUILayout.Button("New Level"))
-		{
-			myTarget.NewBoard();
-		}
+		if (Application.isPlaying)
+        {
+            if (GUILayout.Button("New Level"))
+            {
+                myTarget.NewBoard();
+            }
 
-		if (GUILayout.Button("Save level"))
-		{
-			var board = myTarget.GetBoard();
-			BoardObject.Save(board);
-		}
+            if (GUILayout.Button("Save level"))
+            {
+                var board = myTarget.GetBoard();
+                BoardObject.Save(board);
+            }
+        }
+
 	}
 }
 
