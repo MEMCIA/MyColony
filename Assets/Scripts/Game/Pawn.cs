@@ -1,5 +1,8 @@
-﻿namespace Assets.Scripts.Game
+﻿using System;
+
+namespace Assets.Scripts.Game
 {
+    [Serializable]
     class Pawn : IPawn
     {
         public Pawn(int owner)

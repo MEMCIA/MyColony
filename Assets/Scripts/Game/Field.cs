@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using System;
 
 namespace Assets.Scripts.Game
 {
+    [Serializable]
     class Field : IField
     {
 
