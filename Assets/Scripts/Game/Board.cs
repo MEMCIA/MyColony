@@ -19,8 +19,16 @@ namespace Assets.Scripts.Game
         }
 
         // width & height
-        public Vector2Int Dimensions { get; }
+        public Vector2Int Dimensions { get; protected set; }
         List<IField> _allFields = new List<IField>();
+
+        Board CreateSampleBoard()
+        {
+            Board board = new Board(new Vector2Int(3, 3));
+            board.PlacePawnAt(new Vector2Int(0,0), 1);
+            board.PlacePawnAt(new Vector2Int(2, 2), 2);
+            return board;
+        }
 
         public void CreateFields()
         {
@@ -76,7 +84,7 @@ namespace Assets.Scripts.Game
         {
             var field = GetField(position);
             if (field == null) return false;
-            if (field.IsEmpty()) return false;
+            if (!field.IsEmpty()) return false;
             field.Pawn = new Pawn(owner);
             return true;
         }
