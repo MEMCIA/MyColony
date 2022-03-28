@@ -8,6 +8,9 @@ using UnityEngine.Events;
 public class BoardEditor : MonoBehaviour
 {
     public static BoardEditor CurrentEditor;
+
+    public Vector2Int Dimensions = new Vector2Int(3,3);
+
     Board _board;
     BoardView _view;
 
@@ -25,6 +28,12 @@ public class BoardEditor : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void NewBoard()
+    {
+        var board = new Board(Dimensions);
+        LoadBoard(board);
     }
 
     public void LoadBoard(Board board)

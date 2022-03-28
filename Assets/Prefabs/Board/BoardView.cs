@@ -9,7 +9,6 @@ public class BoardView : MonoBehaviour
 {
     // prefab used for each field
     public FieldView Field;
-    public Vector2Int Dimensions = new Vector2Int(3, 3);
     public float FieldSize = 1.0f;
     public float DistanceBetweenFields = 0.1f;
     public LayerMask FieldsLayers = new LayerMask();
@@ -17,6 +16,7 @@ public class BoardView : MonoBehaviour
 
     List<FieldView> _fields;
     protected IBoard _boardModel;
+    Vector2Int _dimensions = new Vector2Int(3, 3);
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,7 @@ public class BoardView : MonoBehaviour
     public void SetBoard(Board board)
     {
         _boardModel = board;
-        Dimensions = _boardModel.Dimensions;
+        _dimensions = _boardModel.Dimensions;
         CreateFields();
     }
 
@@ -72,7 +72,7 @@ public class BoardView : MonoBehaviour
 
     FieldView FieldViewForPosition(Vector2Int position)
     {
-        return _fields[position.x + position.y * Dimensions.x];
+        return _fields[position.x + position.y * _dimensions.x];
     }
 
     public void CreateFields()
@@ -83,8 +83,8 @@ public class BoardView : MonoBehaviour
             return;
 
         _fields = new List<FieldView>();
-        for (int y = 0; y < Dimensions.y; y ++)
-            for(int x = 0; x < Dimensions.x; x ++)
+        for (int y = 0; y < _dimensions.y; y ++)
+            for(int x = 0; x < _dimensions.x; x ++)
             {
                 var newField = CreateField(new Vector2Int(x, y));
                 _fields.Add(newField);
@@ -104,8 +104,8 @@ public class BoardView : MonoBehaviour
     {
         // point 0,0 should be in center of our field, so let's calculate board size in local space
         // by summing dimensions of fields and space between them
-        float localWidth = FieldSize * Dimensions.x + DistanceBetweenFields * (Dimensions.x - 1);
-        float localHeight = FieldSize * Dimensions.y + DistanceBetweenFields * (Dimensions.y - 1);
+        float localWidth = FieldSize * _dimensions.x + DistanceBetweenFields * (_dimensions.x - 1);
+        float localHeight = FieldSize * _dimensions.y + DistanceBetweenFields * (_dimensions.y - 1);
 
         // board should be centerd on (0,0), so lets shift start position by half of board width
         float x_start = -localWidth / 2.0f;
