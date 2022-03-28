@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using UnityEngine.UI;
 
 public class BoardEditor : MonoBehaviour
 {
     IBoard _board;
     BoardView _view;
+    [SerializeField] private Button btn;
 
     void Awake()
     {
@@ -19,6 +20,8 @@ public class BoardEditor : MonoBehaviour
         _view = GetComponent<BoardView>();
         _view.BoardModel = _board;
         _view.OnFieldClicked.AddListener(OnClicked);
+
+        btn.onClick.AddListener(OnclickButton);
     }
 
     void Update()
@@ -30,5 +33,24 @@ public class BoardEditor : MonoBehaviour
     {
         _board.PlacePawnAt(field.Position, 1);
         _view.RefreshField(field.Position);
+    }
+
+    private void OnclickButton()
+    {
+        string json = SaveBoard.ToJSON(TransformBoardintoSaveBoard());
+        Debug.Log(json);
+    }
+
+    private SaveBoard TransformBoardintoSaveBoard()
+    {
+        var allFieldsBoard = _board.GetAllFields();
+        List<SaveField> savefields = new List<SaveField>();
+
+        for (int i = 0; i < allFieldsBoard.Count; i++)
+        {
+            savefields.Add(new SaveField(allFieldsBoard[i].Pawn.Owner));
+        }
+
+        return new SaveBoard(_board.Dimensions.x,_board.Dimensions.y, savefields);
     }
 }
