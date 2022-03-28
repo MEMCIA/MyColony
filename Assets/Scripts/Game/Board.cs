@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Game
 {
+    [Serializable]
     class Board : IBoard
     {
+        public Board()
+        {
+
+        }
+
         public Board(Vector2Int dimensions)
         {
             Dimensions = dimensions;
@@ -72,6 +79,16 @@ namespace Assets.Scripts.Game
             if (field.IsEmpty()) return false;
             field.Pawn = new Pawn(owner);
             return true;
+        }
+
+        public static string ToJSON(Board b)
+        {
+            return JsonUtility.ToJson(b);
+        }
+
+        public static Board FromJSON(string json)
+        {
+            return JsonUtility.FromJson<Board>(json);
         }
     }
 }

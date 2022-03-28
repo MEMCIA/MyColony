@@ -4,9 +4,15 @@ namespace Assets.Scripts.Game
 {
     class Field : IField
     {
+
         public Field(Vector2Int position)
         {
             Position = position;
+        }
+
+        public Field()
+        {
+
         }
 
         // position of this field
