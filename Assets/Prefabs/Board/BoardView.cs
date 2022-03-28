@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-// this code will be also run in the editor, so fields will be created for preview
-[ExecuteAlways]
 public class BoardView : MonoBehaviour
 {
     [System.NonSerialized]
@@ -95,8 +93,6 @@ public class BoardView : MonoBehaviour
         field.BoardModel = BoardModel;
         field.Position = position;
         field.transform.localPosition = FieldPositionToLocalPosition(position);
-        // this object will be not saved as part of the scene
-        field.hideFlags = HideFlags.DontSaveInEditor;
         return field;
     }
 
