@@ -81,8 +81,8 @@ public class BoardView : MonoBehaviour
             return;
 
         _fields = new List<FieldView>();
-        for (int x = 0; x < Dimensions.x; x ++)
-            for(int y = 0; y < Dimensions.y; y ++)
+        for (int y = 0; y < Dimensions.y; y ++)
+            for(int x = 0; x < Dimensions.x; x ++)
             {
                 var newField = CreateField(new Vector2Int(x, y));
                 _fields.Add(newField);
