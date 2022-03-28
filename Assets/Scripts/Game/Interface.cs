@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-interface IPawn
+public interface IPawn
 {
     public int Owner { get; }
 }
 
 
-interface IField
+public interface IField
 {
     // position of this field
     public Vector2Int Position { get; }
@@ -21,7 +21,7 @@ interface IField
 }
 
 
-interface IBoard
+public interface IBoard
 {
     // width & height
     public Vector2Int Dimensions { get; }

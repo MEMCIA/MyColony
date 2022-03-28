@@ -8,17 +8,24 @@ using UnityEngine.Events;
 [ExecuteAlways]
 public class BoardView : MonoBehaviour
 {
+    [System.NonSerialized]
+    public IBoard Board;
+
     // prefab used for each field
     public FieldView Field;
     public Vector2Int Dimensions = new Vector2Int(3, 3);
     public float FieldSize = 1.0f;
     public float DistanceBetweenFields = 0.1f;
     public LayerMask FieldsLayers = new LayerMask();
-    public UnityEvent<Vector2Int> OnFieldClicked = new UnityEvent<Vector2Int>();
+    public UnityEvent<IField> OnFieldClicked = new UnityEvent<IField>();
+
+    List<FieldView> _fields;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (Board != null)
+            Dimensions = Board.Dimensions;
         CreateFields();
     }
 
@@ -51,8 +58,19 @@ public class BoardView : MonoBehaviour
                 return;
 
             Debug.Log($"Clicked on field {field.Position}");
-            OnFieldClicked.Invoke(field.Position);
+            OnFieldClicked.Invoke(field.GetField());
         }
+    }
+
+    public void RefreshField(Vector2Int position)
+    {
+        var field = FieldViewForPosition(position);
+        field.Refresh();
+    }
+
+    FieldView FieldViewForPosition(Vector2Int position)
+    {
+        return _fields[position.x + position.y * Dimensions.x];
     }
 
     public void CreateFields()
@@ -62,16 +80,19 @@ public class BoardView : MonoBehaviour
         if (!Field) 
             return;
 
-        for(int x = 0; x < Dimensions.x; x ++)
+        _fields = new List<FieldView>();
+        for (int x = 0; x < Dimensions.x; x ++)
             for(int y = 0; y < Dimensions.y; y ++)
             {
-                CreateField(new Vector2Int(x, y));
+                var newField = CreateField(new Vector2Int(x, y));
+                _fields.Add(newField);
             }
     }
 
     FieldView CreateField(Vector2Int position)
     {
         var field = Instantiate(Field, transform);
+        field.Board = Board;
         field.Position = position;
         field.transform.localPosition = FieldPositionToLocalPosition(position);
         // this object will be not saved as part of the scene
