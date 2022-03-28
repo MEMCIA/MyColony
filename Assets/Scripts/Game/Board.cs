@@ -17,11 +17,11 @@ namespace Assets.Scripts.Game
 
         public void CreateFields()
         {
-            for (int i = 0; i < Dimensions.x; i++)
+            for (int i = 0; i < Dimensions.y; i++)
             {
-                for (int j = 0; j < Dimensions.y; j++)
+                for (int j = 0; j < Dimensions.x; j++)
                 {
-                    _allFields.Add(new Field(new Vector2Int(i, j)));
+                    _allFields.Add(new Field(new Vector2Int(j, i)));
                 }
             }
         }
