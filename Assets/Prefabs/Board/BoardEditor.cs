@@ -11,8 +11,11 @@ public class BoardEditor : MonoBehaviour
 
     public Vector2Int Dimensions = new Vector2Int(3,3);
 
+    List<KeyCode> keyCodesNumbers = new List<KeyCode> { KeyCode.Keypad0, KeyCode.Keypad1, KeyCode.Keypad2, KeyCode.Keypad3, KeyCode.Keypad4, KeyCode.Keypad5, KeyCode.Keypad6, KeyCode.Keypad7, KeyCode.Keypad8, KeyCode.Keypad9 }; 
+
     Board _board;
     BoardView _view;
+    int _currentPawnOwner = 1;
 
     void Awake()
     {
@@ -49,7 +52,19 @@ public class BoardEditor : MonoBehaviour
 
     void OnClicked(IField field)
     {
-        _board.PlacePawnAt(field.Position, 1);
+        ChangeCurrentPawnOwner();
+        _board.PlacePawnAt(field.Position, _currentPawnOwner);
+        field.Pawn.SetOwner(_currentPawnOwner);
         _view.RefreshField(field.Position);
     }
+   
+    void ChangeCurrentPawnOwner()
+    {  
+            for (int i = 0; i < keyCodesNumbers.Count; i++)
+            {
+                if (Input.GetKey(keyCodesNumbers[i])) _currentPawnOwner = i;
+            }
+    }
+
+
 }

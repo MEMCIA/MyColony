@@ -8,5 +8,10 @@
         }
 
         public int Owner { get; set; }
+        
+        public void SetOwner(int owner)
+        {
+            Owner = owner;
+        }
     }
 }

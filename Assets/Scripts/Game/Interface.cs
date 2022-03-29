@@ -5,6 +5,7 @@ using UnityEngine;
 public interface IPawn
 {
     public int Owner { get; }
+    public void SetOwner(int owner);
 }
 
 
