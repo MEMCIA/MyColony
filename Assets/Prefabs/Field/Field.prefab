@@ -45,7 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f0bf50c090f174da80c0edd675db94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pawn: {fileID: 4422127638830755785}
+  Pawn: {fileID: 7422096128812378930}
+  PawnColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.0058350563, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0.20905471, a: 1}
+  - {r: 0.9509299, g: 1, b: 0, a: 1}
+  - {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
 --- !u!65 &8238613485101017999
 BoxCollider:
   m_ObjectHideFlags: 0
