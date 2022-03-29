@@ -73,5 +73,23 @@ namespace Assets.Scripts.Game
             field.Pawn = new Pawn(owner);
             return true;
         }
+
+        public static Board CreateFromSaveBoard(SaveBoard saveBoard)
+        {
+            Board board = new Board(new Vector2Int(saveBoard.Width, saveBoard.Height));
+            board.CreateFields();
+            for (int i = 0; i < saveBoard.Fields.Count; i++)
+            {
+                if (saveBoard.Fields[i].PawnOwner == SaveField.NoPawn)
+                {
+                    board._allFields[i].Pawn = null;
+                    continue;
+                }
+
+                board._allFields[i].Pawn = new Pawn(saveBoard.Fields[i].PawnOwner);
+            }
+
+            return board;
+        }
     }
 }

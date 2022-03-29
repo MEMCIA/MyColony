@@ -18,6 +18,24 @@ namespace Assets.Scripts.Game
             Fields = fields;
         }
 
+        public static SaveBoard CreateFromBoard(IBoard board)
+        {
+            var allFieldsBoard = board.GetAllFields();
+            List<SaveField> savefields = new List<SaveField>();
+
+            for (int i = 0; i < allFieldsBoard.Count; i++)
+            {
+                if (allFieldsBoard[i].Pawn == null)
+                {
+                    savefields.Add(new SaveField(SaveField.NoPawn));
+                    continue;
+                }
+                savefields.Add(new SaveField(allFieldsBoard[i].Pawn.Owner));
+            }
+
+            return new SaveBoard(board.Dimensions.x, board.Dimensions.y, savefields);
+        }
+
         public static string ToJSON(SaveBoard b)
         {
             return JsonUtility.ToJson(b);
