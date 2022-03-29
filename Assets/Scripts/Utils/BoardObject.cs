@@ -17,7 +17,8 @@ public class BoardObject : ScriptableObject
     {
         // TODO
         // return Board.FromJson(JSON);
-        return new Board(new Vector2Int(3, 3));
+        SaveBoard sv = SaveBoard.FromJSON(JSON);
+        return Board.CreateFromSaveBoard(sv);
     }
 
     static public void Save(Board b)
@@ -28,6 +29,8 @@ public class BoardObject : ScriptableObject
         boardData.Name = "Default";
         // TODO
         // boardData.JSON = b.ToJson();
+        SaveBoard sv = SaveBoard.CreateFromBoard(b);
+        boardData.JSON = SaveBoard.ToJSON(sv);
 
         var date = DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss");
         var path = $"Assets/Levels/{date}.asset";
