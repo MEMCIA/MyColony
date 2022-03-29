@@ -18,7 +18,7 @@ namespace Assets.Scripts.Game
             Fields = fields;
         }
 
-        public static string CreateFromBoard(IBoard board)
+        public static string BoardToJSON(IBoard board)
         {
             var allFieldsBoard = board.GetAllFields();
             List<SaveField> savefields = new List<SaveField>();

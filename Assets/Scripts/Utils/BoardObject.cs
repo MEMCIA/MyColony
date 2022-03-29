@@ -25,7 +25,7 @@ public class BoardObject : ScriptableObject
         var boardData = CreateInstance<BoardObject>();
         boardData.Name = "Default";
 
-        boardData.JSON = SaveBoard.CreateFromBoard(b);
+        boardData.JSON = SaveBoard.BoardToJSON(b);
 
         var date = DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss");
         var path = $"Assets/Levels/{date}.asset";
