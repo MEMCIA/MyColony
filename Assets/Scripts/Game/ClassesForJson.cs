@@ -18,7 +18,7 @@ namespace Assets.Scripts.Game
             Fields = fields;
         }
 
-        public static SaveBoard CreateFromBoard(IBoard board)
+        public static string CreateFromBoard(IBoard board)
         {
             var allFieldsBoard = board.GetAllFields();
             List<SaveField> savefields = new List<SaveField>();
@@ -33,7 +33,8 @@ namespace Assets.Scripts.Game
                 savefields.Add(new SaveField(allFieldsBoard[i].Pawn.Owner));
             }
 
-            return new SaveBoard(board.Dimensions.x, board.Dimensions.y, savefields);
+            SaveBoard sv = new SaveBoard(board.Dimensions.x, board.Dimensions.y, savefields);
+            return SaveBoard.ToJSON(sv);
         }
 
         public static string ToJSON(SaveBoard b)

@@ -74,19 +74,19 @@ namespace Assets.Scripts.Game
             return true;
         }
 
-        public static Board CreateFromSaveBoard(SaveBoard saveBoard)
+        public static Board CreateFromSaveBoard(string JSON)
         {
-            Board board = new Board(new Vector2Int(saveBoard.Width, saveBoard.Height));
+            SaveBoard sv = SaveBoard.FromJSON(JSON);
+            Board board = new Board(new Vector2Int(sv.Width, sv.Height));
             board.CreateFields();
-            for (int i = 0; i < saveBoard.Fields.Count; i++)
+            for (int i = 0; i < sv.Fields.Count; i++)
             {
-                if (saveBoard.Fields[i].PawnOwner == SaveField.NoPawn)
+                if (sv.Fields[i].PawnOwner == SaveField.NoPawn)
                 {
-                    board._allFields[i].Pawn = null;
                     continue;
                 }
 
-                board._allFields[i].Pawn = new Pawn(saveBoard.Fields[i].PawnOwner);
+                board._allFields[i].Pawn = new Pawn(sv.Fields[i].PawnOwner);
             }
 
             return board;
