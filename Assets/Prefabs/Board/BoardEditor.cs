@@ -15,7 +15,7 @@ public class BoardEditor : MonoBehaviour
 
     Board _board;
     BoardView _view;
-    int _currentPawnOwner = 1;
+    int _currentPawnOwner = 0;
 
     void Awake()
     {
@@ -30,7 +30,7 @@ public class BoardEditor : MonoBehaviour
 
     void Update()
     {
-
+        ChangeCurrentPawnOwner();
     }
 
     public void NewBoard()
@@ -52,9 +52,7 @@ public class BoardEditor : MonoBehaviour
 
     void OnClicked(IField field)
     {
-        ChangeCurrentPawnOwner();
         _board.PlacePawnAt(field.Position, _currentPawnOwner);
-        field.Pawn.SetOwner(_currentPawnOwner);
         _view.RefreshField(field.Position);
     }
    
