@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.Game 
 {
     [Serializable]
-    class SaveBoard
+    public class SaveBoard
     {
         public int Width;
         public int Height;
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Game
     }
 
     [Serializable]
-    class SaveField
+    public class SaveField
     {
         public const int NoPawn = -1;
         public SaveField(int pawnOwner)
