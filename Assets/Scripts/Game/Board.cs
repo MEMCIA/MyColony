@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Game
 {
-    class Board : IBoard
+    public class Board : IBoard
     {
         public Board(Vector2Int dimensions)
         {
