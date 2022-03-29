@@ -9,7 +9,9 @@ public class FieldView : MonoBehaviour
     [System.NonSerialized]
     public Vector2Int Position;
 
-    public GameObject Pawn;
+    public MeshRenderer Pawn;
+    public List<Color> PawnColors;
+
 
     IField _fieldModel;
 
@@ -24,7 +26,14 @@ public class FieldView : MonoBehaviour
     {
         if (_fieldModel == null)
             return;
-        Pawn.SetActive(_fieldModel.Pawn != null);
+
+        var pawn = _fieldModel.Pawn;
+        Pawn.gameObject.SetActive(pawn != null);
+        if (pawn != null)
+        {
+            // set color for pawn
+            Pawn.material.color = PawnColors[pawn.Owner % PawnColors.Count];
+        }
     }
 
     public IField GetField()
