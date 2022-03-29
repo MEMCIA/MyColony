@@ -37,6 +37,25 @@ namespace Assets.Scripts.Game
             return SaveBoard.ToJSON(sv);
         }
 
+        public static Board CreateFromJSON(string JSON)
+        {
+            SaveBoard sv = SaveBoard.FromJSON(JSON);
+            Board board = new Board(new Vector2Int(sv.Width, sv.Height));
+            board.CreateFields();
+            for (int i = 0; i < sv.Fields.Count; i++)
+            {
+                if (sv.Fields[i].PawnOwner == SaveField.NoPawn)
+                {
+                    continue;
+                }
+
+                IField field = board.GetFieldFromIndex(i);
+                field.Pawn = new Pawn(sv.Fields[i].PawnOwner);
+            }
+
+            return board;
+        }
+
         public static string ToJSON(SaveBoard b)
         {
             return JsonUtility.ToJson(b);

@@ -33,6 +33,12 @@ namespace Assets.Scripts.Game
             return _allFields[index];
         }
 
+        public IField GetFieldFromIndex(int index)
+        {
+            if (index < 0 || index >= _allFields.Count) return null;
+            return _allFields[index];
+        }
+
         public List<IField> GetAllFields()
         {
             return _allFields;
@@ -72,24 +78,6 @@ namespace Assets.Scripts.Game
             if (!field.IsEmpty()) return false;
             field.Pawn = new Pawn(owner);
             return true;
-        }
-
-        public static Board CreateFromSaveBoard(string JSON)
-        {
-            SaveBoard sv = SaveBoard.FromJSON(JSON);
-            Board board = new Board(new Vector2Int(sv.Width, sv.Height));
-            board.CreateFields();
-            for (int i = 0; i < sv.Fields.Count; i++)
-            {
-                if (sv.Fields[i].PawnOwner == SaveField.NoPawn)
-                {
-                    continue;
-                }
-
-                board._allFields[i].Pawn = new Pawn(sv.Fields[i].PawnOwner);
-            }
-
-            return board;
         }
     }
 }

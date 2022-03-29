@@ -15,8 +15,7 @@ public class BoardObject : ScriptableObject
 
     public Board Load()
     {
-        // return Board.FromJson(JSON);
-        return Board.CreateFromSaveBoard(JSON);
+        return SaveBoard.CreateFromJSON(JSON);
     }
 
     static public void Save(Board b)
@@ -25,8 +24,7 @@ public class BoardObject : ScriptableObject
         // if we are in editor, let's create an BoardObject in 
         var boardData = CreateInstance<BoardObject>();
         boardData.Name = "Default";
-       
-        // boardData.JSON = b.ToJson();
+
         boardData.JSON = SaveBoard.CreateFromBoard(b);
 
         var date = DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss");
