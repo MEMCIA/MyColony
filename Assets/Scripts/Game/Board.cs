@@ -33,6 +33,12 @@ namespace Assets.Scripts.Game
             return _allFields[index];
         }
 
+        public IField GetFieldFromIndex(int index)
+        {
+            if (index < 0 || index >= _allFields.Count) return null;
+            return _allFields[index];
+        }
+
         public List<IField> GetAllFields()
         {
             return _allFields;
