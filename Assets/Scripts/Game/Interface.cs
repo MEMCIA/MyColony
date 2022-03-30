@@ -30,9 +30,7 @@ public interface IBoard
     public IField GetField(Vector2Int position);
     public List<IField> GetAllFields();
 
-    public List<IField> GetAvailableMovesFor(Vector2Int position);
-
-    // try to place pawn at spe
+    // try to place pawn at position 
     public bool PlacePawnAt(Vector2Int position, int owner);
 }
 
