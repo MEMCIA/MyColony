@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
 public class BoardEditor : MonoBehaviour
 {
     public static BoardEditor CurrentEditor;
 
-    public Vector2Int Dimensions = new Vector2Int(3,3);
+    public Vector2Int Dimensions = new Vector2Int(3, 3);
 
-    List<KeyCode> keyCodesNumbers = new List<KeyCode> { KeyCode.Alpha0, KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9 }; 
+    List<KeyCode> keyCodesNumbers = new List<KeyCode> { KeyCode.Alpha0, KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9 };
 
     Board _board;
     BoardView _view;
@@ -58,12 +57,12 @@ public class BoardEditor : MonoBehaviour
         }
         _view.RefreshField(field.Position);
     }
-   
+
     void ChangeCurrentPawnOwner()
-    {  
-            for (int i = 0; i < keyCodesNumbers.Count; i++)
-            {
-                if (Input.GetKey(keyCodesNumbers[i])) _currentPawnOwner = i;
-            }
+    {
+        for (int i = 0; i < keyCodesNumbers.Count; i++)
+        {
+            if (Input.GetKey(keyCodesNumbers[i])) _currentPawnOwner = i;
+        }
     }
 }

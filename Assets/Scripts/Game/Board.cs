@@ -44,32 +44,6 @@ namespace Assets.Scripts.Game
             return _allFields;
         }
 
-        public List<IField> GetAvailableMovesFor(Vector2Int position)
-        {
-            List<Vector2Int> neighborsCoordinates = FindNeighborOfFieldCoordinates(position);
-            List<IField> availableMoves = new List<IField>();
-            foreach (var n in neighborsCoordinates)
-            {
-                var field = GetField(n);
-                if (field != null || field.IsEmpty()) availableMoves.Add(field);
-            }
-            return availableMoves;
-        }
-
-        List<Vector2Int> FindNeighborOfFieldCoordinates(Vector2Int position)
-        {
-            List<Vector2Int> neighbors = new List<Vector2Int>();
-            neighbors.Add(new Vector2Int(position.x + 1, position.y));
-            neighbors.Add(new Vector2Int(position.x - 1, position.y));
-            neighbors.Add(new Vector2Int(position.x, position.y + 1));
-            neighbors.Add(new Vector2Int(position.x, position.y - 1));
-            neighbors.Add(new Vector2Int(position.x + 1, position.y + 1));
-            neighbors.Add(new Vector2Int(position.x + 1, position.y - 1));
-            neighbors.Add(new Vector2Int(position.x - 1, position.y + 1));
-            neighbors.Add(new Vector2Int(position.x - 1, position.y - 1));
-            return neighbors;
-        }
-
         // try to place pawn at spe
         public bool PlacePawnAt(Vector2Int position, int owner)
         {
