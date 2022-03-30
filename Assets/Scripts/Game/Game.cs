@@ -6,10 +6,18 @@ namespace Assets.Scripts.Game
     class Game
     {
         IBoard _board;
-
+        int _activePlayer = 1;
+        int _disponibleDistanceToMove = 2;
+        int _distanceInWhichPawnIsNotDeleted = 1;
         public Game(IBoard board)
         {
             _board = board;
+        }
+
+        bool CheckIfPawnBelongsToCurrentPlayer(IField start)
+        {
+            if (start.Pawn.Owner == _activePlayer) return true;
+            return false;
         }
 
         public bool MakeMove(IField start, IField target)
@@ -18,34 +26,77 @@ namespace Assets.Scripts.Game
                 return false;
             if (!target.IsEmpty())
                 return false;
+            if (!CheckIfPawnBelongsToCurrentPlayer(start)) return false;
+            List<IField> availableMoves = GetAvailableMovesFor(start.Position);
+            if (!CheckIfTargetFieldIsAvaiable(availableMoves, target)) return false;
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
+            int distanceCovered = CheckDistanceOfMakedMove(start, target);
+            if (!CheckIfStartPawnMustBeDeleted(distanceCovered)) return true;
+            _board.RemovePawn(start.Position);
             return true;
+        }
+
+        void ChangeOwnerOfNeighboringPawns(IField target)
+        {
+            List<Vector2Int> newNeighborsCoordinates = FindAvailableCoordinatesInDistance(target.Position, 1);
+            List<IField> newNeighborsFields = new List<IField>();
+            //TODO sprawdź czy sąsiadujące pola mają pawna, jeśli tak, to zmień jego kolor
+        }
+
+        bool CheckIfStartPawnMustBeDeleted(int distanceCovered)
+        {
+            if (distanceCovered > _distanceInWhichPawnIsNotDeleted) return true;
+            return false;
+        }
+
+        int CheckDistanceOfMakedMove(IField start, IField target)
+        {
+            int distanceX = Mathf.Abs(start.Position.x - target.Position.x);
+            int distanceY = Mathf.Abs(start.Position.y - target.Position.y);
+            return Mathf.Max(distanceX, distanceY);
+        }
+
+        bool CheckIfTargetFieldIsAvaiable(List<IField> availableMoves, IField target)
+        {
+            bool isAvaiable = false;
+            foreach (var field in availableMoves)
+            {
+                if (field.Position == target.Position) isAvaiable = true;
+            }
+            return isAvaiable;
         }
 
         public List<IField> GetAvailableMovesFor(Vector2Int position)
         {
-            List<Vector2Int> neighborsCoordinates = FindNeighborOfFieldCoordinates(position);
-            List<IField> availableMoves = new List<IField>();
-            foreach (var n in neighborsCoordinates)
+            List<Vector2Int> availableCoordinatesToCheck = FindAvailableCoordinatesInDistance(position, _disponibleDistanceToMove);
+            List<IField> finalAvailableMoves = new List<IField>();
+
+            foreach (var n in availableCoordinatesToCheck)
             {
                 var field = _board.GetField(n);
-                if (field != null || field.IsEmpty()) availableMoves.Add(field);
+                if (field == null || !field.IsEmpty()) continue;
+                if(field.Pawn ==null) finalAvailableMoves.Add(field);
             }
-            return availableMoves;
+            return finalAvailableMoves;
         }
 
-        List<Vector2Int> FindNeighborOfFieldCoordinates(Vector2Int position)
+        List<Vector2Int> FindAvailableCoordinatesInDistance(Vector2Int position, int distance)
         {
-            List<Vector2Int> neighbors = new List<Vector2Int>();
-            neighbors.Add(new Vector2Int(position.x + 1, position.y));
-            neighbors.Add(new Vector2Int(position.x - 1, position.y));
-            neighbors.Add(new Vector2Int(position.x, position.y + 1));
-            neighbors.Add(new Vector2Int(position.x, position.y - 1));
-            neighbors.Add(new Vector2Int(position.x + 1, position.y + 1));
-            neighbors.Add(new Vector2Int(position.x + 1, position.y - 1));
-            neighbors.Add(new Vector2Int(position.x - 1, position.y + 1));
-            neighbors.Add(new Vector2Int(position.x - 1, position.y - 1));
-            return neighbors;
+            int length = distance * 2 + 1;
+            Vector2Int positionOfLeftDownAvaiableField = new Vector2Int(position.x - distance, position.y - distance);
+            List<Vector2Int> avaiableCoordinates = new List<Vector2Int>();
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    Vector2Int avaiableCoordinate = positionOfLeftDownAvaiableField + new Vector2Int(i,j);
+                    if (avaiableCoordinate == position) continue;
+                    avaiableCoordinates.Add(avaiableCoordinate);
+                }
+            }
+
+            return avaiableCoordinates;
         }
 
     }
