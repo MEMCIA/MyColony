@@ -12,7 +12,9 @@ public class BoardView : MonoBehaviour
     public float FieldSize = 1.0f;
     public float DistanceBetweenFields = 0.1f;
     public LayerMask FieldsLayers = new LayerMask();
+    public LayerMask PawnsLayers = new LayerMask();
     public UnityEvent<IField> OnFieldClicked = new UnityEvent<IField>();
+    public UnityEvent<IField> OnPawnClicked = new UnityEvent<IField>();
 
     List<FieldView> _fields;
     protected IBoard _boardModel;
@@ -41,33 +43,50 @@ public class BoardView : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            CheckIfClicked();
+            MouseClickCheck();
         }
     }
 
-    void CheckIfClicked()
+    void MouseClickCheck()
+    {
+        FieldView field;
+
+        field = CheckIfClicked(FieldsLayers);
+        if (field)
+            OnFieldClicked.Invoke(field.GetField());
+
+        field = CheckIfClicked(PawnsLayers);
+        if (field)
+            OnPawnClicked.Invoke(field.GetField());
+    }
+
+    FieldView CheckIfClicked(int layerMask)
     {
         RaycastHit hit;
         var camera = Camera.main;
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, FieldsLayers))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             var objectHit = hit.collider.gameObject;
-            var field = objectHit.GetComponent<FieldView>();
+            var field = objectHit.GetComponentInParent<FieldView>();
 
-            if (!field)
-                return;
-
-            Debug.Log($"Clicked on field {field.Position}");
-            OnFieldClicked.Invoke(field.GetField());
+            if (field)
+                return field;
         }
+        return null;
     }
 
     public void RefreshField(Vector2Int position)
     {
         var field = FieldViewForPosition(position);
         field.Refresh();
+    }
+
+    public void RefreshAllFields()
+    {
+        foreach (var field in _fields)
+            field.Refresh();
     }
 
     FieldView FieldViewForPosition(Vector2Int position)
