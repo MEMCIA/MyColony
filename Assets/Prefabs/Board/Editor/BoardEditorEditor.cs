@@ -41,7 +41,11 @@ public class LoadLevelAssets
     {
         var selection = Selection.activeObject as BoardObject;
         var board = selection.Load();
-        BoardEditor.CurrentEditor.LoadBoard(board);
+
+        if (BoardEditor.CurrentEditor != null)
+            BoardEditor.CurrentEditor.LoadBoard(board);
+        if (BoardGame.CurrentGame != null)
+            BoardGame.CurrentGame.LoadBoard(board);
     }
 
     [MenuItem("Assets/Load Level", true)]
