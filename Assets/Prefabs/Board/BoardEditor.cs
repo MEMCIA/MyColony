@@ -51,7 +51,10 @@ public class BoardEditor : MonoBehaviour
 
     void OnClicked(IField field)
     {
-        _board.PlacePawnAt(field.Position, _currentPawnOwner);
+        if(!_board.RemovePawn(field.Position))
+        {
+            _board.PlacePawnAt(field.Position, _currentPawnOwner);
+        }
         _view.RefreshField(field.Position);
     }
 
@@ -62,6 +65,4 @@ public class BoardEditor : MonoBehaviour
             if (Input.GetKey(keyCodesNumbers[i])) _currentPawnOwner = i;
         }
     }
-
-
 }

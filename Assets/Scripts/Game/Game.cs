@@ -55,6 +55,9 @@ namespace Assets.Scripts.Game
                 return false;
             if (!target.IsEmpty())
                 return false;
+            if (!CheckIfPawnBelongsToCurrentPlayer(start)) return false;
+            List<IField> availableMoves = GetAvailableMovesFor(start.Position);
+            if (!IsValidMove(availableMoves, target)) return false;
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
             int distanceBetween = CheckDistanceBetween(start, target);
             if (!CheckIfStartPawnMustBeDeleted(distanceBetween)) return true;
@@ -117,7 +120,7 @@ namespace Assets.Scripts.Game
                 if (n == null || !n.IsEmpty()) continue;
                 if(n.Pawn ==null) finalAvailableMoves.Add(n);
             }
-            return availableMoves;
+            return finalAvailableMoves;
         }
 
         List<IField> FindFieldsinDistance(Vector2Int position, int distance)
