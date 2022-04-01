@@ -19,7 +19,7 @@ public interface IField
 
     // is field emtpy, and can be moved into?
     public bool IsEmpty();
-    public void SetPawnToNull();
+    public void RemovePawn();
 }
 
 

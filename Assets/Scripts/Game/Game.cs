@@ -7,7 +7,7 @@ namespace Assets.Scripts.Game
     {
         IBoard _board;
         int _activePlayer = 1;
-        int _disponibleDistanceToMove = 2;
+        int _availableDistanceToMove = 2;
         int _distanceInWhichPawnIsNotDeleted = 1;
         public Game(IBoard board)
         {
@@ -28,10 +28,10 @@ namespace Assets.Scripts.Game
                 return false;
             if (!CheckIfPawnBelongsToCurrentPlayer(start)) return false;
             List<IField> availableMoves = GetAvailableMovesFor(start.Position);
-            if (!CheckIfTargetFieldIsAvaiable(availableMoves, target)) return false;
+            if (!IsValidMove(availableMoves, target)) return false;
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
-            int distanceCovered = CheckDistanceOfMakedMove(start, target);
-            if (!CheckIfStartPawnMustBeDeleted(distanceCovered)) return true;
+            int distanceBetween = CheckDistanceOfMakedMove(start, target);
+            if (!CheckIfStartPawnMustBeDeleted(distanceBetween)) return true;
             _board.RemovePawn(start.Position);
             return true;
         }
@@ -43,9 +43,9 @@ namespace Assets.Scripts.Game
             //TODO sprawdź czy sąsiadujące pola mają pawna, jeśli tak, to zmień jego kolor
         }
 
-        bool CheckIfStartPawnMustBeDeleted(int distanceCovered)
+        bool CheckIfStartPawnMustBeDeleted(int distanceBetween)
         {
-            if (distanceCovered > _distanceInWhichPawnIsNotDeleted) return true;
+            if (distanceBetween > _distanceInWhichPawnIsNotDeleted) return true;
             return false;
         }
 
@@ -56,19 +56,14 @@ namespace Assets.Scripts.Game
             return Mathf.Max(distanceX, distanceY);
         }
 
-        bool CheckIfTargetFieldIsAvaiable(List<IField> availableMoves, IField target)
+        bool IsValidMove(List<IField> availableMoves, IField target)
         {
-            bool isAvaiable = false;
-            foreach (var field in availableMoves)
-            {
-                if (field.Position == target.Position) isAvaiable = true;
-            }
-            return isAvaiable;
+            return availableMoves.Contains(target);
         }
 
         public List<IField> GetAvailableMovesFor(Vector2Int position)
         {
-            List<Vector2Int> availableCoordinatesToCheck = FindAvailableCoordinatesInDistance(position, _disponibleDistanceToMove);
+            List<Vector2Int> availableCoordinatesToCheck = FindAvailableCoordinatesInDistance(position, _availableDistanceToMove);
             List<IField> finalAvailableMoves = new List<IField>();
 
             foreach (var n in availableCoordinatesToCheck)

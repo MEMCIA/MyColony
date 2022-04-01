@@ -23,7 +23,7 @@ namespace Assets.Scripts.Game
             return false;
         }
 
-        public void SetPawnToNull()
+        public void RemovePawn()
         {
             Pawn = null;
         }
