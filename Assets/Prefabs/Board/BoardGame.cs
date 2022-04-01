@@ -64,7 +64,7 @@ public class BoardGame : MonoBehaviour
 
     void MakeAMove(IField start, IField target)
     {
-        _game.MakeMove(start, target);
+        _game.Turn(start, target);
         _view.RefreshAllFields();
     }
 
