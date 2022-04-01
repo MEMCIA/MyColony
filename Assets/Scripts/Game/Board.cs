@@ -53,5 +53,14 @@ namespace Assets.Scripts.Game
             field.Pawn = new Pawn(owner);
             return true;
         }
+
+        public bool RemovePawn(Vector2Int position)
+        {
+            var field = GetField(position);
+            if (field == null) return false;
+            if (field.IsEmpty()) return false;
+            field.RemovePawn();
+            return true;
+        }
     }
 }

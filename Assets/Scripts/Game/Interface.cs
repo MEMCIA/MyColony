@@ -19,6 +19,7 @@ public interface IField
 
     // is field emtpy, and can be moved into?
     public bool IsEmpty();
+    public void RemovePawn();
 }
 
 
@@ -32,5 +33,7 @@ public interface IBoard
 
     // try to place pawn at position 
     public bool PlacePawnAt(Vector2Int position, int owner);
+
+    public bool RemovePawn(Vector2Int position);
 }
 
