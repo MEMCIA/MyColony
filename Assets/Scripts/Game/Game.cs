@@ -51,17 +51,15 @@ namespace Assets.Scripts.Game
 
         bool MakeMove(IField start, IField target)
         {
-            if (start.Pawn == null)
+            if (!IsValidMove(start, target)) 
                 return false;
-            if (!target.IsEmpty())
-                return false;
-            if (!CheckIfPawnBelongsToCurrentPlayer(start)) return false;
-            List<IField> availableMoves = GetAvailableMovesFor(start.Position);
-            if (!IsValidMove(availableMoves, target)) return false;
+            
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
+
             int distanceBetween = CheckDistanceBetween(start, target);
-            if (!CheckIfStartPawnMustBeDeleted(distanceBetween)) return true;
-            _board.RemovePawn(start.Position);
+            if (CheckIfStartPawnMustBeDeleted(distanceBetween))
+                _board.RemovePawn(start.Position);
+
             ChangeOwnerOfNeighboringPawns(target);
             return true;
         }
@@ -105,8 +103,16 @@ namespace Assets.Scripts.Game
             return Mathf.Max(distanceX, distanceY);
         }
 
-        bool IsValidMove(List<IField> availableMoves, IField target)
+        bool IsValidMove(IField start, IField target)
         {
+            if (start.Pawn == null)
+                return false;
+            if (!target.IsEmpty())
+                return false;
+            if (!CheckIfPawnBelongsToCurrentPlayer(start))
+                return false;
+
+            List<IField> availableMoves = GetAvailableMovesFor(start.Position);
             return availableMoves.Contains(target);
         }
 
