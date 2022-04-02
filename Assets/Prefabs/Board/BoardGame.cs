@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class BoardGame : MonoBehaviour
 {
+    public static Board NextBoard;
     public static BoardGame CurrentGame;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
@@ -24,8 +25,15 @@ public class BoardGame : MonoBehaviour
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
-        // TODO use sample board here
-        LoadBoard(new Board(new Vector2Int(3, 3)));
+        LoadStartingBoard();
+    }
+
+    void LoadStartingBoard()
+    {
+        if (NextBoard != null)
+            LoadBoard(NextBoard);
+        else
+            LoadBoard(new Board(new Vector2Int(3, 3)));
     }
 
     public void NewBoard()
