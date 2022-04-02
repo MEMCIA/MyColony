@@ -27,13 +27,15 @@ public class BoardGame : MonoBehaviour
 
         // only hilight pawns of current player
         _view.PawnSelectionFilter = (IField field) => 
-        { 
+        {
+            if (!IsCurrentPlayerHuman()) return false;
             return field.Pawn.Owner == _game.GetActivePlayer(); 
         };
 
         // only hilight fields if pawn is selected, and field is a valid move
         _view.FieldSelectionFilter = (IField field) =>
         {
+            if (!IsCurrentPlayerHuman()) return false;
             if (_selectedPawnField == null)
                 return false;
             return _game.IsValidMove(_selectedPawnField, field);
@@ -52,9 +54,10 @@ public class BoardGame : MonoBehaviour
     {
         _board = board;
         _game = new Game(_board);
-        _players = Players.CreateHumanPlayers(_game);
+        _players = Players.CreateHumans(_game);
         _view.SetBoard(board);
         _players.OnTurnStart();
+        _view.RefreshAllFields();
     }
 
     public Board GetBoard()
@@ -83,6 +86,13 @@ public class BoardGame : MonoBehaviour
         _game.Turn(start, target);
         _players.OnTurnStart();
         _view.RefreshAllFields();
+    }
+
+    bool IsCurrentPlayerHuman()
+    {
+        if (_players == null) return false;
+        if (!_players.IsCurrentPlayerHuman()) return false;
+        return true;
     }
 
 }

@@ -32,7 +32,8 @@ namespace Assets.Scripts.Game
         public void OnTurnStart(Game game)
         {
             // TODO make a move
-
+            // var activePlayer = game.GetActivePlayer();
+            // game.Turn(start, field);
         }
     }
 
@@ -46,7 +47,7 @@ namespace Assets.Scripts.Game
             _game = game;
         }
 
-        static public Players CreateHumanPlayers(Game game)
+        static public Players CreateHumans(Game game)
         {
             int numerOfPlayers = game.GetNumberOfPlayers();
             var players = new Players(game);
@@ -82,6 +83,11 @@ namespace Assets.Scripts.Game
                 if (currentPlayer.IsHuman()) return;
                 currentPlayer.OnTurnStart(_game);
             }
+        }
+
+        public bool IsCurrentPlayerHuman()
+        {
+            return GetActivePlayer()?.IsHuman() ?? false;
         }
 
         IPlayer GetActivePlayer()
