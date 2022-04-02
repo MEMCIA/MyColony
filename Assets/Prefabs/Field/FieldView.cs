@@ -9,14 +9,22 @@ public class FieldView : MonoBehaviour
     [System.NonSerialized]
     public Vector2Int Position;
 
+    public MeshRenderer Field;
     public MeshRenderer Pawn;
+    
     public List<Color> PawnColors;
+    public Color PawnSelectedColor = Color.white;
+    public Material FieldSelectedMaterial;
 
+    Material _standardFieldMaterial;
 
+    bool _fieldSelected;
+    bool _pawnSelected;
     IField _fieldModel;
 
     private void Start()
     {
+        _standardFieldMaterial = Field.sharedMaterial;
         if (BoardModel != null)
             _fieldModel = BoardModel.GetField(Position);
         Refresh();
@@ -32,12 +40,32 @@ public class FieldView : MonoBehaviour
         if (pawn != null)
         {
             // set color for pawn
-            Pawn.material.color = PawnColors[pawn.Owner % PawnColors.Count];
+            if (_pawnSelected)
+            {
+                Pawn.material.color = PawnSelectedColor;
+            }
+            else 
+            {
+                Pawn.material.color = PawnColors[pawn.Owner % PawnColors.Count];
+            }
+            
         }
     }
 
     public IField GetField()
     {
         return _fieldModel;
+    }
+
+    public void SetFieldSelected(bool selected)
+    {
+        _fieldSelected = selected;
+        Field.sharedMaterial = _fieldSelected ? FieldSelectedMaterial : _standardFieldMaterial;
+    }
+
+    public void SetPawnSelected(bool selected)
+    {
+        _pawnSelected = selected;
+        Refresh();
     }
 }

@@ -22,6 +22,7 @@ public class BoardEditor : MonoBehaviour
 
         _view = GetComponent<BoardView>();
         _view.OnFieldClicked.AddListener(OnClicked);
+        _view.PawnSelectionFilter = (IField) => false;
 
         // TODO use sample board here
         LoadBoard(new Board(new Vector2Int(3, 3)));

@@ -30,6 +30,11 @@ namespace Assets.Scripts.Game
             _numberOfPlayers = number;
         }
 
+        public int GetActivePlayer()
+        {
+            return _activePlayer;
+        }
+
         void SetNextActivePlayer()
         {
             int lastPlayer = _numberOfPlayers - 1;
@@ -103,7 +108,7 @@ namespace Assets.Scripts.Game
             return Mathf.Max(distanceX, distanceY);
         }
 
-        bool IsValidMove(IField start, IField target)
+        public bool IsValidMove(IField start, IField target)
         {
             if (start.Pawn == null)
                 return false;

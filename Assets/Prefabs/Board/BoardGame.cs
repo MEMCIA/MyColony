@@ -24,6 +24,20 @@ public class BoardGame : MonoBehaviour
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
+        // only hilight pawns of current player
+        _view.PawnSelectionFilter = (IField field) => 
+        { 
+            return field.Pawn.Owner == _game.GetActivePlayer(); 
+        };
+
+        // only hilight fields if pawn is selected, and field is a valid move
+        _view.FieldSelectionFilter = (IField field) =>
+        {
+            if (_selectedPawnField == null)
+                return false;
+            return _game.IsValidMove(_selectedPawnField, field);
+        };
+
         // TODO use sample board here
         LoadBoard(new Board(new Vector2Int(3, 3)));
     }
