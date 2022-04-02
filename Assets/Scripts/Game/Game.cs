@@ -20,7 +20,11 @@ namespace Assets.Scripts.Game
 
         int GetOwnerWithHighestId()
         {
-            return _board.GetAllFields().Where(field => field.Pawn != null).Select(field => field.Pawn.Owner).Max();
+            return _board.GetAllFields()
+                .Where(field => field.Pawn != null)
+                .Select(field => field.Pawn.Owner)
+                .DefaultIfEmpty()
+                .Max();
         }
 
         public void Turn(IField start, IField target)
