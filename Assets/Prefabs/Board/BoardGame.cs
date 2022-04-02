@@ -13,6 +13,7 @@ public class BoardGame : MonoBehaviour
     Game _game;
     Board _board;
     BoardView _view;
+    Players _players;
 
     IField _selectedPawnField;
 
@@ -38,7 +39,6 @@ public class BoardGame : MonoBehaviour
             return _game.IsValidMove(_selectedPawnField, field);
         };
 
-        // TODO use sample board here
         LoadBoard(new Board(new Vector2Int(3, 3)));
     }
 
@@ -52,7 +52,9 @@ public class BoardGame : MonoBehaviour
     {
         _board = board;
         _game = new Game(_board);
+        _players = Players.CreateHumanPlayers(_game);
         _view.SetBoard(board);
+        _players.OnTurnStart();
     }
 
     public Board GetBoard()
@@ -80,6 +82,7 @@ public class BoardGame : MonoBehaviour
     {
         _game.Turn(start, target);
         _view.RefreshAllFields();
+        _players.OnTurnStart();
     }
 
 }
