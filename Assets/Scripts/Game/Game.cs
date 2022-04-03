@@ -73,6 +73,7 @@ namespace Assets.Scripts.Game
         bool SetNextActivePlayerThatCanMove()
         {
             int playersThatCannotMove = 0;
+            SetNextActivePlayer();
 
             for (int i = 0; i < _numberOfPlayers; i++)
             {
