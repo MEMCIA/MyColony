@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public List<BoardObject> Levels;
     public Button StartButton;
     public Dropdown LevelSelect;
+    public Toggle AIToggle;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class MainMenu : MonoBehaviour
     {
         var selectedLevel = Levels[LevelSelect.value];
         BoardGame.StartingBoard = selectedLevel.Load();
+        BoardGame.WithAI = AIToggle.isOn;
         SceneManager.LoadScene("Assets/Test/Scenes/GamePlay.unity");
     }
 }

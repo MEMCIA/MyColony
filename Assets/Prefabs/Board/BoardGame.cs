@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class BoardGame : MonoBehaviour
 {
     public static Board StartingBoard;
+    public static bool WithAI = false;
     public static BoardGame CurrentGame;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
@@ -66,7 +67,10 @@ public class BoardGame : MonoBehaviour
     {
         _board = board;
         _game = new Game(_board);
-        _players = Players.CreateHumans(_game);
+        if (WithAI)
+            _players = Players.CreateHumanAndAIs(_game);
+        else
+            _players = Players.CreateHumans(_game);
         _view.SetBoard(board);
         _players.OnTurnStart();
         _view.RefreshAllFields();
