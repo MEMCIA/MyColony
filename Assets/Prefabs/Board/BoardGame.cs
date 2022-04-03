@@ -25,7 +25,7 @@ public class BoardGame : MonoBehaviour
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
-        LoadStartingBoard();
+        
         // only hilight pawns of current player
         _view.PawnSelectionFilter = (IField field) =>
         {
@@ -40,8 +40,7 @@ public class BoardGame : MonoBehaviour
             return _game.IsValidMove(_selectedPawnField, field);
         };
 
-        // TODO use sample board here
-        LoadBoard(new Board(new Vector2Int(3, 3)));
+        LoadStartingBoard();
     }
 
     void LoadStartingBoard()
