@@ -11,6 +11,7 @@ namespace Assets.Scripts.Game
         int _activePlayer = 0;
         int _availableDistanceToMove = 2;
         int _distanceInWhichPawnIsNotDeleted = 1;
+        bool GameOver = false;
 
         public Game(IBoard board)
         {
@@ -19,15 +20,35 @@ namespace Assets.Scripts.Game
 
         public void Turn(IField start, IField target)
         {
-            if(MakeMove(start,target))
+            if (MakeMove(start,target))
             {
-                SetNextActivePlayer();
+                if (SetNextActivePlayerThatCanMove()) GameOver = true;
             }
         }
 
-        void SetNumberOfPlayers(int number)
+        List<IField> FindPawnsThatBelongsToPlayer(int player)
         {
-            _numberOfPlayers = number;
+
+            var filedsWithPawns = from a in _board.GetAllFields()
+                                          where a.Pawn != null
+                                          select a;
+
+            var fieldsWithPawnsOfPlayer = from f in filedsWithPawns
+                                          where f.Pawn.Owner == player
+                                          select f;
+
+            return fieldsWithPawnsOfPlayer.ToList();
+        }
+
+        List<IField> GetAllAvailableMoves(int player)
+        {
+            List<IField> fieldsWithPawnsOfPlayer = FindPawnsThatBelongsToPlayer(player);
+
+            var allAvailabeMoves = from a in fieldsWithPawnsOfPlayer
+                                   where GetAvailableMovesFor(a.Position).Count > 0
+                                   select a;
+
+            return allAvailabeMoves.ToList();
         }
 
         public int GetActivePlayer()
@@ -38,6 +59,7 @@ namespace Assets.Scripts.Game
         void SetNextActivePlayer()
         {
             int lastPlayer = _numberOfPlayers - 1;
+
             if (_activePlayer == lastPlayer)
             {
                 _activePlayer = 0;
@@ -46,6 +68,24 @@ namespace Assets.Scripts.Game
             {
                 _activePlayer++;
             }
+        }
+
+        bool SetNextActivePlayerThatCanMove()
+        {
+            int playersThatCannotMove = 0;
+
+            for (int i = 0; i < _numberOfPlayers; i++)
+            {
+                List<IField> availableMovesOfPlayer = GetAllAvailableMoves(_activePlayer);
+
+                if (availableMovesOfPlayer.Count == 0)
+                {
+                    SetNextActivePlayer();
+                    playersThatCannotMove++;
+                }
+            }
+
+            return playersThatCannotMove != _numberOfPlayers;
         }
 
         bool CheckIfPawnBelongsToCurrentPlayer(IField start)
