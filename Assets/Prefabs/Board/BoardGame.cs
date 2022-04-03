@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class BoardGame : MonoBehaviour
 {
     public static Board StartingBoard;
+    public static bool WithAI = false;
     public static BoardGame CurrentGame;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
