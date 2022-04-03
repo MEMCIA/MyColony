@@ -61,6 +61,11 @@ namespace Assets.Scripts.Game
             return allAvailabeMoves.ToList();
         }
 
+        public int GetNumberOfPlayers()
+        {
+            return _numberOfPlayers;
+        }
+
         public int GetActivePlayer()
         {
             return _activePlayer;
