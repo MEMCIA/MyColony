@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc86a06d7288ed4b8fa6260f5284139, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
-  Name: Level1
-  JSON: '{"Width":3,"Height":3,"Fields":[{"PawnOwner":-1},{"PawnOwner":0},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":1},{"PawnOwner":-1}]}'
+  Name: Level 1
+  JSON: '{"Width":8,"Height":8,"Fields":[{"PawnOwner":0},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":2},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":-1},{"PawnOwner":3}]}'
