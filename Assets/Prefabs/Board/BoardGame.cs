@@ -14,6 +14,7 @@ public class BoardGame : MonoBehaviour
     Game _game;
     Board _board;
     BoardView _view;
+    Players _players;
 
     IField _selectedPawnField;
 
@@ -25,23 +26,24 @@ public class BoardGame : MonoBehaviour
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
-        LoadStartingBoard();
+        
         // only hilight pawns of current player
-        _view.PawnSelectionFilter = (IField field) =>
+        _view.PawnSelectionFilter = (IField field) => 
         {
-            return field.Pawn.Owner == _game.GetActivePlayer();
+            if (!IsCurrentPlayerHuman()) return false;
+            return field.Pawn.Owner == _game.GetActivePlayer(); 
         };
 
         // only hilight fields if pawn is selected, and field is a valid move
         _view.FieldSelectionFilter = (IField field) =>
         {
+            if (!IsCurrentPlayerHuman()) return false;
             if (_selectedPawnField == null)
                 return false;
             return _game.IsValidMove(_selectedPawnField, field);
         };
 
-        // TODO use sample board here
-        LoadBoard(new Board(new Vector2Int(3, 3)));
+        LoadStartingBoard();
     }
 
     void LoadStartingBoard()
@@ -64,7 +66,10 @@ public class BoardGame : MonoBehaviour
     {
         _board = board;
         _game = new Game(_board);
+        _players = Players.CreateHumans(_game);
         _view.SetBoard(board);
+        _players.OnTurnStart();
+        _view.RefreshAllFields();
     }
 
     public Board GetBoard()
@@ -91,7 +96,15 @@ public class BoardGame : MonoBehaviour
     void MakeAMove(IField start, IField target)
     {
         _game.Turn(start, target);
+        _players.OnTurnStart();
         _view.RefreshAllFields();
+    }
+
+    bool IsCurrentPlayerHuman()
+    {
+        if (_players == null) return false;
+        if (!_players.IsCurrentPlayerHuman()) return false;
+        return true;
     }
 
 }
