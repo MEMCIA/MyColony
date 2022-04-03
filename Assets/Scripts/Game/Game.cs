@@ -15,6 +15,16 @@ namespace Assets.Scripts.Game
         public Game(IBoard board)
         {
             _board = board;
+            _numberOfPlayers = GetOwnerWithHighestId() + 1;
+        }
+
+        int GetOwnerWithHighestId()
+        {
+            return _board.GetAllFields()
+                .Where(field => field.Pawn != null)
+                .Select(field => field.Pawn.Owner)
+                .DefaultIfEmpty()
+                .Max();
         }
 
         public void Turn(IField start, IField target)
@@ -24,15 +34,25 @@ namespace Assets.Scripts.Game
                 SetNextActivePlayer();
             }
         }
-
-        void SetNumberOfPlayers(int number)
+        public int GetNumberOfPlayers()
         {
-            _numberOfPlayers = number;
+            return _numberOfPlayers;
         }
 
         public int GetActivePlayer()
         {
             return _activePlayer;
+        }
+
+        public bool IsGameOver()
+        {
+            // TODO detect end of game
+            return false;
+        }
+
+        public IBoard Board()
+        {
+            return _board;
         }
 
         void SetNextActivePlayer()
