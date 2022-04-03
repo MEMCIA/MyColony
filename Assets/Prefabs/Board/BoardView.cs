@@ -1,4 +1,5 @@
 using Assets.Scripts.Game;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +14,18 @@ public class BoardView : MonoBehaviour
     public float DistanceBetweenFields = 0.1f;
     public LayerMask FieldsLayers = new LayerMask();
     public LayerMask PawnsLayers = new LayerMask();
+
     public UnityEvent<IField> OnFieldClicked = new UnityEvent<IField>();
     public UnityEvent<IField> OnPawnClicked = new UnityEvent<IField>();
+
+    public UnityEvent<IField> OnFieldHover = new UnityEvent<IField>();
+    public UnityEvent<IField> OnPawnHover = new UnityEvent<IField>();
+
+    FieldView _currentField;
+    FieldView _currentPawn;
+
+    public Func<IField, bool> PawnSelectionFilter;
+    public Func<IField, bool> FieldSelectionFilter;
 
     List<FieldView> _fields;
     protected IBoard _boardModel;
@@ -41,26 +52,70 @@ public class BoardView : MonoBehaviour
             return;
         }
 
+        MouseHoverCheckField();
+        MouseHoverCheckPawn();
+
         if (Input.GetMouseButtonUp(0))
         {
             MouseClickCheck();
         }
     }
 
-    void MouseClickCheck()
+    void MouseHoverCheckField()
     {
-        FieldView field;
+        FieldView field = CheckMouseRaycast(FieldsLayers);
+        IField fieldModel = field ? field.GetField() : null;
 
-        field = CheckIfClicked(FieldsLayers);
-        if (field)
-            OnFieldClicked.Invoke(field.GetField());
+        // check if field should be highlighted by calling FieldSelectionFilter
+        if (FieldSelectionFilter != null && fieldModel != null)
+            if (!FieldSelectionFilter(fieldModel))
+                field = null;
 
-        field = CheckIfClicked(PawnsLayers);
-        if (field)
-            OnPawnClicked.Invoke(field.GetField());
+
+        if (_currentField != field)
+        {
+            if (_currentField)
+                _currentField.SetFieldSelected(false);
+            _currentField = field;
+            if (_currentField)
+                _currentField.SetFieldSelected(true);
+
+            OnFieldHover.Invoke(fieldModel);
+        }
     }
 
-    FieldView CheckIfClicked(int layerMask)
+    void MouseHoverCheckPawn()
+    {
+        FieldView field = CheckMouseRaycast(PawnsLayers);
+        IField fieldModel = field ? field.GetField() : null;
+
+        // check if pawn should be highlighted by calling FieldSelectionFilter
+        if (PawnSelectionFilter != null && fieldModel != null)
+            if (!PawnSelectionFilter(fieldModel))
+                field = null;
+
+        if (_currentPawn != field)
+        {
+            if (_currentPawn)
+                _currentPawn.SetPawnSelected(false);
+            _currentPawn = field;
+            if (_currentPawn)
+                _currentPawn.SetPawnSelected(true);
+
+            OnPawnHover.Invoke(_currentPawn ? _currentPawn.GetField() : null);
+        }
+    }
+
+    void MouseClickCheck()
+    {
+        if (_currentField)
+            OnFieldClicked.Invoke(_currentField.GetField());
+
+        if (_currentPawn)
+            OnPawnClicked.Invoke(_currentPawn.GetField());
+    }
+
+    FieldView CheckMouseRaycast(int layerMask)
     {
         RaycastHit hit;
         var camera = Camera.main;
