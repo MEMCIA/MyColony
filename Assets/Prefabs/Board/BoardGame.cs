@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class BoardGame : MonoBehaviour
 {
-    public static Board NextBoard;
+    public static Board StartingBoard;
     public static BoardGame CurrentGame;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
@@ -26,12 +26,30 @@ public class BoardGame : MonoBehaviour
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
         LoadStartingBoard();
+        // only hilight pawns of current player
+        _view.PawnSelectionFilter = (IField field) =>
+        {
+            return field.Pawn.Owner == _game.GetActivePlayer();
+        };
+
+        // only hilight fields if pawn is selected, and field is a valid move
+        _view.FieldSelectionFilter = (IField field) =>
+        {
+            if (_selectedPawnField == null)
+                return false;
+            return _game.IsValidMove(_selectedPawnField, field);
+        };
+
+        // TODO use sample board here
+        LoadBoard(new Board(new Vector2Int(3, 3)));
     }
 
     void LoadStartingBoard()
     {
-        if (NextBoard != null)
-            LoadBoard(NextBoard);
+        if (StartingBoard != null)
+        {
+            LoadBoard(StartingBoard);
+        }
         else
             LoadBoard(new Board(new Vector2Int(3, 3)));
     }

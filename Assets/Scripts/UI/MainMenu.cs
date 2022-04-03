@@ -27,7 +27,7 @@ public class MainMenu : MonoBehaviour
     void StartLevel()
     {
         var selectedLevel = Levels[LevelSelect.value];
-        BoardGame.NextBoard = selectedLevel.Load();
+        BoardGame.StartingBoard = selectedLevel.Load();
         SceneManager.LoadScene("Assets/Test/Scenes/GamePlay.unity");
     }
 }
