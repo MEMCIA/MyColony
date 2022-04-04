@@ -1,7 +1,5 @@
 using Assets.Scripts.Game;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 #if UNITY_EDITOR
 using UnityEngine;

@@ -1,8 +1,5 @@
 using Assets.Scripts.Game;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BoardGame : MonoBehaviour
 {
@@ -27,12 +24,12 @@ public class BoardGame : MonoBehaviour
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
-        
+
         // only hilight pawns of current player
-        _view.PawnSelectionFilter = (IField field) => 
+        _view.PawnSelectionFilter = (IField field) =>
         {
             if (!IsCurrentPlayerHuman()) return false;
-            return field.Pawn.Owner == _game.GetActivePlayer(); 
+            return field.Pawn.Owner == _game.GetActivePlayer();
         };
 
         // only hilight fields if pawn is selected, and field is a valid move

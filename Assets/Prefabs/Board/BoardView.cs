@@ -1,6 +1,5 @@
 using Assets.Scripts.Game;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -153,12 +152,12 @@ public class BoardView : MonoBehaviour
     {
         // destroy previous children
         DestroyChildren();
-        if (!Field) 
+        if (!Field)
             return;
 
         _fields = new List<FieldView>();
-        for (int y = 0; y < _dimensions.y; y ++)
-            for(int x = 0; x < _dimensions.x; x ++)
+        for (int y = 0; y < _dimensions.y; y++)
+            for (int x = 0; x < _dimensions.x; x++)
             {
                 var newField = CreateField(new Vector2Int(x, y));
                 _fields.Add(newField);

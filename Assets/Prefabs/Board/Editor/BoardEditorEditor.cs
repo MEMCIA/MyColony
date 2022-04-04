@@ -1,23 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(BoardEditor))]
 public class BoardEditorEditor : Editor
 {
 
-	public override void OnInspectorGUI()
-	{
-		DrawDefaultInspector();
-		BoardEditor myTarget = (BoardEditor)target;
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        BoardEditor myTarget = (BoardEditor)target;
 
-		if (Application.isPlaying)
+        if (Application.isPlaying)
         {
             if (GUILayout.Button("New Level"))
             {
@@ -31,7 +24,7 @@ public class BoardEditorEditor : Editor
             }
         }
 
-	}
+    }
 }
 
 public class LoadLevelAssets

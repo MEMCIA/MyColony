@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Assets.Scripts.Game
 {
@@ -69,7 +68,7 @@ namespace Assets.Scripts.Game
                 else
                     players._players.Add(new AIPlayer());
             }
-                
+
             return players;
         }
 

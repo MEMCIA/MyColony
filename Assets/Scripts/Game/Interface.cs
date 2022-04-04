@@ -35,5 +35,7 @@ public interface IBoard
     public bool PlacePawnAt(Vector2Int position, int owner);
 
     public bool RemovePawn(Vector2Int position);
+
+    public List<IField> CoordinatesToFields(List<Vector2Int> coordinates);
 }
 

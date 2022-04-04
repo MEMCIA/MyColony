@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Game
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Game
         public Vector2Int Dimensions { get; }
         List<IField> _allFields = new List<IField>();
 
-        public void CreateFields()
+        void CreateFields()
         {
             for (int i = 0; i < Dimensions.y; i++)
             {
@@ -28,6 +29,9 @@ namespace Assets.Scripts.Game
 
         public IField GetField(Vector2Int position)
         {
+            if (position.x < 0 || position.y < 0) return null;
+            if (position.x >= Dimensions.x || position.y >= Dimensions.y) return null;
+
             int index = position.y * Dimensions.x + position.x;
             if (index < 0 || index >= _allFields.Count) return null;
             return _allFields[index];
@@ -61,6 +65,14 @@ namespace Assets.Scripts.Game
             if (field.IsEmpty()) return false;
             field.RemovePawn();
             return true;
+        }
+
+        public List<IField> CoordinatesToFields(List<Vector2Int> coordinates)
+        {
+            var fields = from coord in coordinates
+                         select GetField(coord);
+
+            return fields.ToList();
         }
     }
 }
