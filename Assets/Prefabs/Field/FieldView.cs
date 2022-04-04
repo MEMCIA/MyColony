@@ -1,3 +1,4 @@
+using CustomExtensions;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ public class FieldView : MonoBehaviour
         if (BoardModel != null)
             _fieldModel = BoardModel.GetField(Position);
         Refresh();
+        RotateRandomly();
     }
 
     public void Refresh()
@@ -66,5 +68,19 @@ public class FieldView : MonoBehaviour
     {
         _pawnSelected = selected;
         Refresh();
+    }
+
+    static List<Vector3> Rotations = new List<Vector3> { 
+        new Vector3(0, 0, 0),
+        new Vector3(90, 0, 0),
+        new Vector3(180, 0, 0),
+        new Vector3(270, 0, 0),
+        new Vector3(0, 0, 90),
+        new Vector3(0, 0, -90)
+    };
+
+    void RotateRandomly()
+    {
+        Field.gameObject.transform.localEulerAngles = Rotations.RandomElement();
     }
 }
