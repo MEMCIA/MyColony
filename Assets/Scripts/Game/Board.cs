@@ -29,6 +29,9 @@ namespace Assets.Scripts.Game
 
         public IField GetField(Vector2Int position)
         {
+            if (position.x < 0 || position.y < 0) return null;
+            if (position.x >= Dimensions.x || position.y >= Dimensions.y) return null;
+
             int index = position.y * Dimensions.x + position.x;
             if (index < 0 || index >= _allFields.Count) return null;
             return _allFields[index];
