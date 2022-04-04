@@ -1,8 +1,6 @@
 using Assets.Scripts.Game;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BoardEditor : MonoBehaviour
 {
@@ -52,7 +50,7 @@ public class BoardEditor : MonoBehaviour
 
     void OnClicked(IField field)
     {
-        if(!_board.RemovePawn(field.Position))
+        if (!_board.RemovePawn(field.Position))
         {
             _board.PlacePawnAt(field.Position, _currentPawnOwner);
         }

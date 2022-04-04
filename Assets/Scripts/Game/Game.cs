@@ -11,7 +11,7 @@ namespace Assets.Scripts.Game
         int _activePlayer = 0;
         int _availableDistanceToMove = 2;
         int _distanceInWhichPawnIsNotDeleted = 1;
-        bool GameOver = false;
+        bool _gameOver = false;
 
         public Game(IBoard board)
         {
@@ -30,35 +30,38 @@ namespace Assets.Scripts.Game
 
         public void Turn(IField start, IField target)
         {
-            if (MakeMove(start,target))
+            if (MakeMove(start, target))
             {
-                if (SetNextActivePlayerThatCanMove()) GameOver = true;
+                if (!SetNextActivePlayer()) _gameOver = true;
+                Debug.Log(_gameOver);
             }
         }
 
-        List<IField> FindPawnsThatBelongsToPlayer(int player)
+        IEnumerable<IField> FindPawnsThatBelongsToPlayer(int player)
         {
 
             var filedsWithPawns = from a in _board.GetAllFields()
-                                          where a.Pawn != null
-                                          select a;
+                                  where a.Pawn != null
+                                  select a;
 
             var fieldsWithPawnsOfPlayer = from f in filedsWithPawns
                                           where f.Pawn.Owner == player
                                           select f;
+            Debug.Log(fieldsWithPawnsOfPlayer.ToList().Count + " wszystkie pionki danego gracza Player: " + player);
 
-            return fieldsWithPawnsOfPlayer.ToList();
+            return fieldsWithPawnsOfPlayer;
         }
 
-        List<IField> GetAllAvailableMoves(int player)
+        IEnumerable<IField> GetAllFieldsWithAvailableMoves(int player)
         {
-            List<IField> fieldsWithPawnsOfPlayer = FindPawnsThatBelongsToPlayer(player);
+            IEnumerable<IField> fieldsWithPawnsOfPlayer = FindPawnsThatBelongsToPlayer(player);
 
-            var allAvailabeMoves = from a in fieldsWithPawnsOfPlayer
+            var allFieldsWithAvailabeMoves = from a in fieldsWithPawnsOfPlayer
                                    where GetAvailableMovesFor(a.Position).Count > 0
                                    select a;
 
-            return allAvailabeMoves.ToList();
+            Debug.Log(allFieldsWithAvailabeMoves.ToList().Count + " all available moves of Player: " + player);
+            return allFieldsWithAvailabeMoves;
         }
 
         public int GetNumberOfPlayers()
@@ -82,7 +85,7 @@ namespace Assets.Scripts.Game
             return _board;
         }
 
-        void SetNextActivePlayer()
+        void SetNextPlayer()
         {
             int lastPlayer = _numberOfPlayers - 1;
 
@@ -96,20 +99,18 @@ namespace Assets.Scripts.Game
             }
         }
 
-        bool SetNextActivePlayerThatCanMove()
+        bool SetNextActivePlayer()
         {
             int playersThatCannotMove = 0;
-            SetNextActivePlayer();
 
             for (int i = 0; i < _numberOfPlayers; i++)
             {
-                List<IField> availableMovesOfPlayer = GetAllAvailableMoves(_activePlayer);
+                SetNextPlayer();
+                IEnumerable<IField> fieldsWithavailableMovesOfPlayer = GetAllFieldsWithAvailableMoves(_activePlayer);
 
-                if (availableMovesOfPlayer.Count == 0)
-                {
-                    SetNextActivePlayer();
-                    playersThatCannotMove++;
-                }
+                if (fieldsWithavailableMovesOfPlayer.Count() != 0) break;
+
+                playersThatCannotMove++;
             }
 
             return playersThatCannotMove != _numberOfPlayers;
@@ -123,9 +124,9 @@ namespace Assets.Scripts.Game
 
         bool MakeMove(IField start, IField target)
         {
-            if (!IsValidMove(start, target)) 
+            if (!IsValidMove(start, target))
                 return false;
-            
+
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
 
             int distanceBetween = CheckDistanceBetween(start, target);
@@ -196,8 +197,10 @@ namespace Assets.Scripts.Game
             foreach (var n in fieldsWithAvailableCoordinates)
             {
                 if (n == null || !n.IsEmpty()) continue;
-                if(n.Pawn ==null) finalAvailableMoves.Add(n);
+                if (n.Pawn == null) finalAvailableMoves.Add(n);
             }
+
+            Debug.Log(finalAvailableMoves.Count + "" + position);
             return finalAvailableMoves;
         }
 
@@ -211,20 +214,20 @@ namespace Assets.Scripts.Game
             {
                 for (int j = 0; j < length; j++)
                 {
-                    Vector2Int availableCoordinate = positionOfLeftDownAvailableField + new Vector2Int(i,j);
+                    Vector2Int availableCoordinate = positionOfLeftDownAvailableField + new Vector2Int(i, j);
                     if (availableCoordinate == position) continue;
                     availableCoordinates.Add(availableCoordinate);
                 }
             }
-
+            Debug.Log("wszystkie dostępne koordynaty" + availableCoordinates.Count +" pozycja: " + position);
             return CoordinatesToFields(availableCoordinates);
         }
 
         List<IField> CoordinatesToFields(List<Vector2Int> coordinates)
         {
             var fields = from a in _board.GetAllFields()
-                        where coordinates.Contains(a.Position)
-                        select a;
+                         where coordinates.Contains(a.Position)
+                         select a;
             return fields.ToList();
         }
 

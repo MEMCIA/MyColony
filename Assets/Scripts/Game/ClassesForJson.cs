@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Game 
+namespace Assets.Scripts.Game
 {
     [Serializable]
     public class SaveBoard
@@ -39,7 +39,7 @@ namespace Assets.Scripts.Game
 
         public static Board CreateFromJSON(string JSON)
         {
-            if (string.IsNullOrEmpty(JSON)) return new Board(new Vector2Int(3,3));
+            if (string.IsNullOrEmpty(JSON)) return new Board(new Vector2Int(3, 3));
 
             SaveBoard sv = SaveBoard.FromJSON(JSON);
             Board board = new Board(new Vector2Int(sv.Width, sv.Height));

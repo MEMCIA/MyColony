@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ public class FieldView : MonoBehaviour
 
     public MeshRenderer Field;
     public MeshRenderer Pawn;
-    
+
     public List<Color> PawnColors;
     public Color PawnSelectedColor = Color.white;
     public Material FieldSelectedMaterial;
@@ -44,11 +43,11 @@ public class FieldView : MonoBehaviour
             {
                 Pawn.material.color = PawnSelectedColor;
             }
-            else 
+            else
             {
                 Pawn.material.color = PawnColors[pawn.Owner % PawnColors.Count];
             }
-            
+
         }
     }
 
