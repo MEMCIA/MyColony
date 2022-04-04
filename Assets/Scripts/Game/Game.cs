@@ -77,7 +77,7 @@ namespace Assets.Scripts.Game
         public bool IsGameOver()
         {
             // TODO detect end of game
-            return false;
+            return _gameOver;
         }
 
         public IBoard Board()
@@ -219,17 +219,8 @@ namespace Assets.Scripts.Game
                     availableCoordinates.Add(availableCoordinate);
                 }
             }
-            Debug.Log("wszystkie dostępne koordynaty" + availableCoordinates.Count +" pozycja: " + position);
-            return CoordinatesToFields(availableCoordinates);
-        }
 
-        List<IField> CoordinatesToFields(List<Vector2Int> coordinates)
-        {
-            var fields = from a in _board.GetAllFields()
-                         where coordinates.Contains(a.Position)
-                         select a;
-            return fields.ToList();
+            return _board.CoordinatesToFields(availableCoordinates);
         }
-
     }
 }

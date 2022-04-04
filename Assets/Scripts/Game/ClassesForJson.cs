@@ -43,7 +43,6 @@ namespace Assets.Scripts.Game
 
             SaveBoard sv = SaveBoard.FromJSON(JSON);
             Board board = new Board(new Vector2Int(sv.Width, sv.Height));
-            board.CreateFields();
 
             for (int i = 0; i < sv.Fields.Count; i++)
             {
