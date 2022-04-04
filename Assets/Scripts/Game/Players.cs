@@ -30,9 +30,21 @@ namespace Assets.Scripts.Game
 
         public void OnTurnStart(Game game)
         {
+            if (MakeMove(game))
+            {
+                if (!game.SetNextActivePlayer()) game.SetGameOver();
+            }
+
             // TODO make a move
             // var activePlayer = game.GetActivePlayer();
             // game.Turn(start, field);
+        }
+
+        bool MakeMove(Game game)
+        {
+            IField start = game.FindRandomPawnOfPlayer();
+            IField target = game.FindRandomMoveForPawn(start);
+            return game.MakeMoveForAI(start, target);
         }
     }
 

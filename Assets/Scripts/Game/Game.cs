@@ -33,8 +33,21 @@ namespace Assets.Scripts.Game
             if (MakeMove(start, target))
             {
                 if (!SetNextActivePlayer()) _gameOver = true;
-                Debug.Log(_gameOver);
             }
+        }
+
+        public IField FindRandomPawnOfPlayer()
+        {
+            List<IField> pawnsOfPlayer = GetAllFieldsWithAvailableMoves(_activePlayer).ToList();
+            int randomIndex1 = Random.Range(0, pawnsOfPlayer.Count());
+            return pawnsOfPlayer[randomIndex1];
+        }
+
+        public IField FindRandomMoveForPawn(IField pawn)
+        {  
+            List<IField> movesForRandomPawn = GetAvailableMovesFor(pawn.Position);
+            int randomIndex = Random.Range(0, movesForRandomPawn.Count());
+            return movesForRandomPawn[randomIndex];
         }
 
         IEnumerable<IField> FindPawnsThatBelongsToPlayer(int player)
@@ -47,7 +60,6 @@ namespace Assets.Scripts.Game
             var fieldsWithPawnsOfPlayer = from f in filedsWithPawns
                                           where f.Pawn.Owner == player
                                           select f;
-            Debug.Log(fieldsWithPawnsOfPlayer.ToList().Count + " wszystkie pionki danego gracza Player: " + player);
 
             return fieldsWithPawnsOfPlayer;
         }
@@ -60,8 +72,12 @@ namespace Assets.Scripts.Game
                                    where GetAvailableMovesFor(a.Position).Count > 0
                                    select a;
 
-            Debug.Log(allFieldsWithAvailabeMoves.ToList().Count + " all available moves of Player: " + player);
             return allFieldsWithAvailabeMoves;
+        }
+
+        public void SetGameOver()
+        {
+            _gameOver = true;
         }
 
         public int GetNumberOfPlayers()
@@ -99,7 +115,7 @@ namespace Assets.Scripts.Game
             }
         }
 
-        bool SetNextActivePlayer()
+        public bool SetNextActivePlayer()
         {
             int playersThatCannotMove = 0;
 
@@ -127,6 +143,18 @@ namespace Assets.Scripts.Game
             if (!IsValidMove(start, target))
                 return false;
 
+            _board.PlacePawnAt(target.Position, start.Pawn.Owner);
+
+            int distanceBetween = CheckDistanceBetween(start, target);
+            if (CheckIfStartPawnMustBeDeleted(distanceBetween))
+                _board.RemovePawn(start.Position);
+
+            ChangeOwnerOfNeighboringPawns(target);
+            return true;
+        }
+
+        public bool MakeMoveForAI(IField start, IField target)
+        {
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
 
             int distanceBetween = CheckDistanceBetween(start, target);
@@ -200,7 +228,6 @@ namespace Assets.Scripts.Game
                 if (n.Pawn == null) finalAvailableMoves.Add(n);
             }
 
-            Debug.Log(finalAvailableMoves.Count + "" + position);
             return finalAvailableMoves;
         }
 
@@ -220,7 +247,7 @@ namespace Assets.Scripts.Game
                 }
             }
 
-            return _board.CoordinatesToFields(availableCoordinates);
+            return _board.CoordinatesToFields(availableCoordinates).ToList();
         }
     }
 }

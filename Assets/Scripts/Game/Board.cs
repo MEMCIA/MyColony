@@ -67,12 +67,12 @@ namespace Assets.Scripts.Game
             return true;
         }
 
-        public List<IField> CoordinatesToFields(List<Vector2Int> coordinates)
+        public IEnumerable<IField> CoordinatesToFields(List<Vector2Int> coordinates)
         {
             var fields = from coord in coordinates
                          select GetField(coord);
 
-            return fields.ToList();
+            return fields;
         }
     }
 }
