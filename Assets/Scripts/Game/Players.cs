@@ -36,10 +36,6 @@ namespace Assets.Scripts.Game
             IField start = FindRandomPawnOfPlayer(game);
             IField target = FindRandomMoveForPawn(start, game);
             game.Turn(start, target);
-
-            // TODO make a move
-            // var activePlayer = game.GetActivePlayer();
-            // game.Turn(start, field);
         }
 
         IField FindRandomPawnOfPlayer(Game game)
