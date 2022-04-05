@@ -33,7 +33,6 @@ namespace Assets.Scripts.Game
             if (MakeMove(start, target))
             {
                 if (!SetNextActivePlayer()) _gameOver = true;
-                Debug.Log(_gameOver);
             }
         }
 
@@ -47,12 +46,11 @@ namespace Assets.Scripts.Game
             var fieldsWithPawnsOfPlayer = from f in filedsWithPawns
                                           where f.Pawn.Owner == player
                                           select f;
-            Debug.Log(fieldsWithPawnsOfPlayer.ToList().Count + " wszystkie pionki danego gracza Player: " + player);
 
             return fieldsWithPawnsOfPlayer;
         }
 
-        IEnumerable<IField> GetAllFieldsWithAvailableMoves(int player)
+        public IEnumerable<IField> GetAllFieldsWithAvailableMoves(int player)
         {
             IEnumerable<IField> fieldsWithPawnsOfPlayer = FindPawnsThatBelongsToPlayer(player);
 
@@ -60,8 +58,12 @@ namespace Assets.Scripts.Game
                                    where GetAvailableMovesFor(a.Position).Count > 0
                                    select a;
 
-            Debug.Log(allFieldsWithAvailabeMoves.ToList().Count + " all available moves of Player: " + player);
             return allFieldsWithAvailabeMoves;
+        }
+
+        void SetGameOver()
+        {
+            _gameOver = true;
         }
 
         public int GetNumberOfPlayers()
@@ -99,7 +101,7 @@ namespace Assets.Scripts.Game
             }
         }
 
-        bool SetNextActivePlayer()
+        public bool SetNextActivePlayer()
         {
             int playersThatCannotMove = 0;
 
@@ -122,7 +124,7 @@ namespace Assets.Scripts.Game
             return false;
         }
 
-        bool MakeMove(IField start, IField target)
+        public bool MakeMove(IField start, IField target)
         {
             if (!IsValidMove(start, target))
                 return false;
@@ -200,7 +202,6 @@ namespace Assets.Scripts.Game
                 if (n.Pawn == null) finalAvailableMoves.Add(n);
             }
 
-            Debug.Log(finalAvailableMoves.Count + "" + position);
             return finalAvailableMoves;
         }
 
@@ -220,7 +221,7 @@ namespace Assets.Scripts.Game
                 }
             }
 
-            return _board.CoordinatesToFields(availableCoordinates);
+            return _board.CoordinatesToFields(availableCoordinates).ToList();
         }
     }
 }

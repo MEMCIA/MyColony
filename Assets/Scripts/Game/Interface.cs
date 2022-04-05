@@ -36,6 +36,6 @@ public interface IBoard
 
     public bool RemovePawn(Vector2Int position);
 
-    public List<IField> CoordinatesToFields(List<Vector2Int> coordinates);
+    public IEnumerable<IField> CoordinatesToFields(List<Vector2Int> coordinates);
 }
 
