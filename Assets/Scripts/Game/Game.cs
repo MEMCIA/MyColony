@@ -12,11 +12,19 @@ namespace Assets.Scripts.Game
         int _availableDistanceToMove = 2;
         int _distanceInWhichPawnIsNotDeleted = 1;
         bool _gameOver = false;
+        int[] _pawnsOfPlayer;
 
         public Game(IBoard board)
         {
             _board = board;
             _numberOfPlayers = GetOwnerWithHighestId() + 1;
+            _pawnsOfPlayer = new int[_numberOfPlayers];
+            CalculateAmountOfPawns();
+        }
+
+        public int AmountOfPawns(int player)
+        {
+            return _pawnsOfPlayer[player];
         }
 
         int GetOwnerWithHighestId()
@@ -34,6 +42,7 @@ namespace Assets.Scripts.Game
             {
                 if (!SetNextActivePlayer()) _gameOver = true;
             }
+            CalculateAmountOfPawns();
         }
 
         IEnumerable<IField> FindPawnsThatBelongsToPlayer(int player)
@@ -59,11 +68,6 @@ namespace Assets.Scripts.Game
                                    select a;
 
             return allFieldsWithAvailabeMoves;
-        }
-
-        void SetGameOver()
-        {
-            _gameOver = true;
         }
 
         public int GetNumberOfPlayers()
@@ -222,6 +226,18 @@ namespace Assets.Scripts.Game
             }
 
             return _board.CoordinatesToFields(availableCoordinates).ToList();
+        }
+
+        void CalculateAmountOfPawns()
+        {
+            for (int i = 0; i < _numberOfPlayers; i++)
+                _pawnsOfPlayer[i] = 0;
+            
+            foreach (var field in _board.GetAllFields())
+            {
+                if (field.Pawn == null) continue;
+                _pawnsOfPlayer[field.Pawn.Owner] ++;
+            }
         }
     }
 }
