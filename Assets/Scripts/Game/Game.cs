@@ -36,20 +36,6 @@ namespace Assets.Scripts.Game
             }
         }
 
-        public IField FindRandomPawnOfPlayer()
-        {
-            List<IField> pawnsOfPlayer = GetAllFieldsWithAvailableMoves(_activePlayer).ToList();
-            int randomIndex1 = Random.Range(0, pawnsOfPlayer.Count());
-            return pawnsOfPlayer[randomIndex1];
-        }
-
-        public IField FindRandomMoveForPawn(IField pawn)
-        {  
-            List<IField> movesForRandomPawn = GetAvailableMovesFor(pawn.Position);
-            int randomIndex = Random.Range(0, movesForRandomPawn.Count());
-            return movesForRandomPawn[randomIndex];
-        }
-
         IEnumerable<IField> FindPawnsThatBelongsToPlayer(int player)
         {
 
@@ -64,7 +50,7 @@ namespace Assets.Scripts.Game
             return fieldsWithPawnsOfPlayer;
         }
 
-        IEnumerable<IField> GetAllFieldsWithAvailableMoves(int player)
+        public IEnumerable<IField> GetAllFieldsWithAvailableMoves(int player)
         {
             IEnumerable<IField> fieldsWithPawnsOfPlayer = FindPawnsThatBelongsToPlayer(player);
 
@@ -75,7 +61,7 @@ namespace Assets.Scripts.Game
             return allFieldsWithAvailabeMoves;
         }
 
-        public void SetGameOver()
+        void SetGameOver()
         {
             _gameOver = true;
         }
@@ -138,23 +124,11 @@ namespace Assets.Scripts.Game
             return false;
         }
 
-        bool MakeMove(IField start, IField target)
+        public bool MakeMove(IField start, IField target)
         {
             if (!IsValidMove(start, target))
                 return false;
 
-            _board.PlacePawnAt(target.Position, start.Pawn.Owner);
-
-            int distanceBetween = CheckDistanceBetween(start, target);
-            if (CheckIfStartPawnMustBeDeleted(distanceBetween))
-                _board.RemovePawn(start.Position);
-
-            ChangeOwnerOfNeighboringPawns(target);
-            return true;
-        }
-
-        public bool MakeMoveForAI(IField start, IField target)
-        {
             _board.PlacePawnAt(target.Position, start.Pawn.Owner);
 
             int distanceBetween = CheckDistanceBetween(start, target);

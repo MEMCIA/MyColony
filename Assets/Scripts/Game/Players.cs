@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts.Game
 {
@@ -30,26 +33,29 @@ namespace Assets.Scripts.Game
 
         public void OnTurnStart(Game game)
         {
-            if (MakeMove(game))
-            {
-                if (!game.SetNextActivePlayer()) game.SetGameOver();
-            }
+            IField start = FindRandomPawnOfPlayer(game);
+            IField target = FindRandomMoveForPawn(start, game);
+            game.Turn(start, target);
 
             // TODO make a move
             // var activePlayer = game.GetActivePlayer();
             // game.Turn(start, field);
         }
 
-        bool MakeMove(Game game)
+        IField FindRandomPawnOfPlayer(Game game)
         {
-            IField start = game.FindRandomPawnOfPlayer();
-            IField target = game.FindRandomMoveForPawn(start);
-            return game.MakeMoveForAI(start, target);
+            List<IField> pawnsOfPlayer = game.GetAllFieldsWithAvailableMoves(game.GetActivePlayer()).ToList();
+            int randomIndex1 = Random.Range(0, pawnsOfPlayer.Count());
+            return pawnsOfPlayer[randomIndex1];
+        }
+
+        IField FindRandomMoveForPawn(IField pawn, Game game)
+        {
+            List<IField> movesForRandomPawn = game.GetAvailableMovesFor(pawn.Position);
+            int randomIndex = Random.Range(0, movesForRandomPawn.Count());
+            return movesForRandomPawn[randomIndex];
         }
     }
-
-
-
 
     class Players
     {
