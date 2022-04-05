@@ -40,14 +40,14 @@ namespace Assets.Scripts.Game
 
         IField FindRandomPawnOfPlayer(Game game)
         {
-            List<IField> pawnsOfPlayer = game.GetAllFieldsWithAvailableMoves(game.GetActivePlayer()).ToList();
+            List<IField> pawnsOfPlayer = game.Utils().GetAllFieldsWithAvailableMoves(game.GetActivePlayer()).ToList();
             int randomIndex1 = Random.Range(0, pawnsOfPlayer.Count());
             return pawnsOfPlayer[randomIndex1];
         }
 
         IField FindRandomMoveForPawn(IField pawn, Game game)
         {
-            List<IField> movesForRandomPawn = game.GetAvailableMovesFor(pawn.Position);
+            List<IField> movesForRandomPawn = game.Utils().GetAvailableMovesFor(pawn.Position);
             int randomIndex = Random.Range(0, movesForRandomPawn.Count());
             return movesForRandomPawn[randomIndex];
         }
