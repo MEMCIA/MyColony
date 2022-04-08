@@ -117,7 +117,7 @@ namespace Assets.Scripts.Game
 
         void ChangeOwnerOfNeighboringPawns(IField target)
         {
-            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target);
+            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target,_activePlayer);
 
             foreach (var f in fieldWithEnemyPawns)
             {

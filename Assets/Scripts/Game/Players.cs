@@ -33,9 +33,47 @@ namespace Assets.Scripts.Game
 
         public void OnTurnStart(Game game)
         {
+            GoodAI(game);
+        }
+
+        void SimpleAI(Game game)
+        {
             IField start = FindRandomPawnOfPlayer(game);
             IField target = FindRandomMoveForPawn(start, game);
             game.Turn(start, target);
+        }
+
+        void GoodAI(Game game)
+        {
+            MoveData bestMove = FindBestMoveForGoodAI(game);
+            game.Turn(bestMove.Start, bestMove.Destination);
+        }
+
+        MoveData FindBestMoveForGoodAI(Game game)
+        {
+            List<MoveData> moveDataList = CreateMoveDataList(game);
+            var moveDataListinOrder = moveDataList.OrderByDescending(x => x.Value).ToList();
+
+            return moveDataListinOrder[0];
+        }
+
+        List<MoveData> CreateMoveDataList(Game game)
+        {
+            List<IField> pawnsOfPlayer = game.Utils().GetAllFieldsWithAvailableMoves(game.GetActivePlayer()).ToList();
+            List<MoveData> moves = new List<MoveData>();
+
+            foreach (var start in pawnsOfPlayer)
+            {
+                List<IField> availableMoves = game.Utils().GetAvailableMovesFor(start.Position);
+
+                foreach (var target in availableMoves)
+                {
+                    int numberOfFieldsWithEnemyPawns = game.Utils().FindEnemiesPawnsInNeighborhood(target, game.GetActivePlayer()).Count;
+                    moves.Add(new MoveData(start, target, numberOfFieldsWithEnemyPawns));
+                }
+            }
+
+            return moves;
         }
 
         IField FindRandomPawnOfPlayer(Game game)
