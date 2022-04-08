@@ -28,6 +28,11 @@ namespace Assets.Scripts.Game
             return _utils;
         }
 
+        public bool GetGameOver()
+        {
+            return _gameOver;
+        }
+
         public int AmountOfPawns(int player)
         {
             return _pawnsOfPlayer[player];
@@ -37,7 +42,7 @@ namespace Assets.Scripts.Game
         {
             if (MakeMove(start, target))
             {
-                SetNextActivePlayer();
+                if (!SetNextActivePlayer()) _gameOver = true;
             }
             CalculateAmountOfPawns();
         }
@@ -74,6 +79,7 @@ namespace Assets.Scripts.Game
         public bool SetNextActivePlayer()
         {
             int playersThatCannotMove = 0;
+            int otherPlayers = _numberOfPlayers - 1;
 
             for (int i = 0; i < _numberOfPlayers; i++)
             {
@@ -85,7 +91,7 @@ namespace Assets.Scripts.Game
                 playersThatCannotMove++;
             }
 
-            return playersThatCannotMove != _numberOfPlayers;
+            return playersThatCannotMove != otherPlayers;
         }
 
         bool CheckIfPawnBelongsToCurrentPlayer(IField start)
@@ -119,13 +125,11 @@ namespace Assets.Scripts.Game
             }
         }
 
-
         bool CheckIfStartPawnMustBeDeleted(int distanceBetween)
         {
             if (distanceBetween > _distanceInWhichPawnIsNotDeleted) return true;
             return false;
         }
-
 
         public bool IsValidMove(IField start, IField target)
         {
@@ -139,7 +143,6 @@ namespace Assets.Scripts.Game
             List<IField> availableMoves = _utils.GetAvailableMovesFor(start.Position);
             return availableMoves.Contains(target);
         }
-
 
         int CalculateAmountOfPawns()
         {
@@ -189,11 +192,38 @@ namespace Assets.Scripts.Game
 
         public bool IsGameOver()
         {
+            if (_gameOver) 
+            {
+                Debug.Log("Game Over");
+                return true;
+            }
+
             bool areAllFieldsOccupied = CheckIfAllFieldsAreOccupied();
             bool isOnlyOneTypeOfPawnsOnBoard = CheckIfIsOnlyOnePawnTypeOnBoard();
+
             if (areAllFieldsOccupied || isOnlyOneTypeOfPawnsOnBoard) _gameOver = true;
             if(_gameOver) Debug.Log("Game Over");
+
             return _gameOver;
+        }
+
+        IField FindEmptyField()
+        {
+            List<IField> fields = _board.GetAllFields();
+            
+            foreach (var field in fields)
+            {
+                if (field.IsEmpty()) return field;
+            }
+            return null;
+        }
+
+        public void SetPawnOnFreeField()
+        {
+            IField emptyField = FindEmptyField();
+            if (emptyField == null) return;
+            Vector2Int position = emptyField.Position;
+            _board.PlacePawnAt(position, _activePlayer);
         }
     }
 }

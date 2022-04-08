@@ -20,7 +20,7 @@ namespace Assets.Scripts.Game
         // is field emtpy, and can be moved into?
         public bool IsEmpty()
         {
-            if (Pawn == null&&!IsObstacle) return true;
+            if (Pawn == null && !IsObstacle) return true;
 
             return false;
         }
