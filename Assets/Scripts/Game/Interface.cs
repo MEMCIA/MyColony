@@ -13,6 +13,7 @@ public interface IField
 {
     // position of this field
     public Vector2Int Position { get; }
+    public bool IsObstacle { get; }
 
     // Pawn at this place, if any
     public IPawn Pawn { get; set; }

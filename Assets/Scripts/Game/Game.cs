@@ -37,7 +37,7 @@ namespace Assets.Scripts.Game
         {
             if (MakeMove(start, target))
             {
-                if (!SetNextActivePlayer()) _gameOver = true;
+                SetNextActivePlayer();
             }
             CalculateAmountOfPawns();
         }
@@ -50,12 +50,6 @@ namespace Assets.Scripts.Game
         public int GetActivePlayer()
         {
             return _activePlayer;
-        }
-
-        public bool IsGameOver()
-        {
-            // TODO detect end of game
-            return _gameOver;
         }
 
         public IBoard Board()
@@ -147,8 +141,10 @@ namespace Assets.Scripts.Game
         }
 
 
-        void CalculateAmountOfPawns()
+        int CalculateAmountOfPawns()
         {
+            int numberOfPawns = 0;
+
             for (int i = 0; i < _numberOfPlayers; i++)
                 _pawnsOfPlayer[i] = 0;
             
@@ -156,7 +152,48 @@ namespace Assets.Scripts.Game
             {
                 if (field.Pawn == null) continue;
                 _pawnsOfPlayer[field.Pawn.Owner] ++;
+                numberOfPawns++;
             }
+
+            return numberOfPawns;
+        }
+
+        int GetFieldsNumberInGame()
+        {
+            var fieldsInGame = from b in _board.GetAllFields()
+                               where !b.IsObstacle
+                               select b;
+            return fieldsInGame.Count();
+        }
+
+        bool CheckIfAllFieldsAreOccupied()
+        {
+            int allFieldsInGame = GetFieldsNumberInGame();
+            int numberOfPawn = CalculateAmountOfPawns();
+
+            if (allFieldsInGame == numberOfPawn) return true;
+            return false;
+        }
+
+        bool CheckIfIsOnlyOnePawnTypeOnBoard()
+        {
+            int playersNumberWithAtLeastOnePawn = 0;
+            foreach (var item in _pawnsOfPlayer)
+            {
+                if (item > 0) playersNumberWithAtLeastOnePawn++;
+            }
+
+            if(playersNumberWithAtLeastOnePawn == 1) return true;
+            return false;
+        }
+
+        public bool IsGameOver()
+        {
+            bool areAllFieldsOccupied = CheckIfAllFieldsAreOccupied();
+            bool isOnlyOneTypeOfPawnsOnBoard = CheckIfIsOnlyOnePawnTypeOnBoard();
+            if (areAllFieldsOccupied || isOnlyOneTypeOfPawnsOnBoard) _gameOver = true;
+            if(_gameOver) Debug.Log("Game Over");
+            return _gameOver;
         }
     }
 }
