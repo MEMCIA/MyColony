@@ -53,8 +53,23 @@ namespace Assets.Scripts.Game
         {
             List<MoveData> moveDataList = CreateMoveDataList(game);
             var moveDataListinOrder = moveDataList.OrderByDescending(x => x.Value).ToList();
+            List<MoveData> bestMoves = new List<MoveData> { moveDataListinOrder[0]};
 
-            return moveDataListinOrder[0];
+            for (int i = 2; i < moveDataListinOrder.Count; i++)
+            {
+                if (moveDataListinOrder[-1 +i].Value == moveDataListinOrder[-2+i].Value)
+                {
+                    bestMoves.Add(moveDataListinOrder[-1+i]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            int randomIndex = Random.Range(0, bestMoves.Count);
+            
+            return bestMoves[randomIndex];
         }
 
         List<MoveData> CreateMoveDataList(Game game)
