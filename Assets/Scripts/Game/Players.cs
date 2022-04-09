@@ -33,7 +33,7 @@ namespace Assets.Scripts.Game
 
         public void OnTurnStart(Game game)
         {
-            GoodAI(game);
+            GoodAI2(game);
         }
 
         void SimpleAI(Game game)
@@ -45,16 +45,79 @@ namespace Assets.Scripts.Game
 
         void GoodAI(Game game)
         {
-            MoveData bestMove = FindBestMoveForGoodAI(game);
+            var moveDataListinOrder = CreateOrderedMoveDataList(game);
+            MoveData bestMove = FindRandomBestMove(game, moveDataListinOrder);
             game.Turn(bestMove.Start, bestMove.Destination);
         }
 
-        MoveData FindBestMoveForGoodAI(Game game)
+        MoveData FindRandomBestMove(Game game, List<MoveData> moveDataListinOrder)
+        {
+            
+            List<MoveData> bestMoves = new List<MoveData> { moveDataListinOrder[0] };
+
+            for (int i = 2; i < moveDataListinOrder.Count; i++)
+            {
+                if (moveDataListinOrder[-1 + i].Value == moveDataListinOrder[-2 + i].Value)
+                {
+                    bestMoves.Add(moveDataListinOrder[-1 + i]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            int randomIndex = Random.Range(0, bestMoves.Count);
+            return bestMoves[randomIndex];
+        }
+
+        void GoodAI2(Game game)
+        {
+            MoveData theBestMove = FindBestMoveForGoodAI2(game);
+            game.Turn(theBestMove.Start, theBestMove.Destination);
+        }
+
+        List<MoveData> CreateOrderedMoveDataList(Game game)
         {
             List<MoveData> moveDataList = CreateMoveDataList(game);
-            var moveDataListinOrder = moveDataList.OrderByDescending(x => x.Value).ToList();
+            return moveDataList.OrderByDescending(x => x.Value).ToList();
+        }
 
-            return moveDataListinOrder[0];
+        MoveData FindBestMoveForGoodAI2(Game game)
+        {
+            var moveDataListinOrder = CreateOrderedMoveDataList(game);
+            MoveData bestMove = FindRandomBestMove(game, moveDataListinOrder);
+
+            return ChangeMoveIfIsDangerous(game, bestMove, moveDataListinOrder);
+        }
+
+        MoveData ChangeMoveIfIsDangerous(Game game, MoveData bestMove, List<MoveData> moveDataListinOrder)
+        {
+            int distance = game.Utils().CheckDistanceBetween(bestMove.Start, bestMove.Destination);
+            if (distance == 1) return bestMove;
+            while (true)
+            {
+                int fieldsOfPLayerInNeighborhood = FindPawnsInNeighborhoodOfPlayer(bestMove.Start, game.GetActivePlayer(), game).Count;
+                if (fieldsOfPLayerInNeighborhood > bestMove.Value) return bestMove;
+                moveDataListinOrder.Remove(bestMove);
+                if (moveDataListinOrder.Count == 0) return bestMove;
+                bestMove = moveDataListinOrder[0];
+            }
+        }
+
+        public List<IField> FindPawnsInNeighborhoodOfPlayer(IField target, int activePlayer, Game game)
+        {
+            List<IField> neighbors = game.Utils().FindFieldsinDistance(target.Position, 1);
+            List<IField> fieldWithPawns = new List<IField>();
+
+            foreach (var n in neighbors)
+            {
+                if (n == null || n.IsEmpty()) continue;
+                if (n.Pawn == null) continue;
+                if (n.Pawn.Owner == activePlayer) fieldWithPawns.Add(n);
+            }
+
+            return fieldWithPawns;
         }
 
         List<MoveData> CreateMoveDataList(Game game)
