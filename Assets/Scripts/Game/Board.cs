@@ -13,8 +13,16 @@ namespace Assets.Scripts.Game
         }
 
         // width & height
-        public Vector2Int Dimensions { get; }
+        public Vector2Int Dimensions { get; set; }
         List<IField> _allFields = new List<IField>();
+
+        public Board DeepCopy()
+        {
+            Board other = (Board)this.MemberwiseClone();
+            other.Dimensions = this.Dimensions;
+            other._allFields = this._allFields;
+            return other;
+        }
 
         void CreateFields()
         {

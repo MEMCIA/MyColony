@@ -27,7 +27,7 @@ public interface IField
 public interface IBoard
 {
     // width & height
-    public Vector2Int Dimensions { get; }
+    public Vector2Int Dimensions { get; set; }
 
     public IField GetField(Vector2Int position);
     public List<IField> GetAllFields();
