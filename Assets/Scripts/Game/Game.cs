@@ -46,6 +46,7 @@ namespace Assets.Scripts.Game
             }
             CalculateAmountOfPawns();
             CheckGameOver();
+            if(IsGameOver()) SetPawnOnFreeField();
         }
 
         public int GetNumberOfPlayers()
@@ -118,7 +119,7 @@ namespace Assets.Scripts.Game
 
         void ChangeOwnerOfNeighboringPawns(IField target)
         {
-            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target);
+            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target,_activePlayer);
 
             foreach (var f in fieldWithEnemyPawns)
             {
@@ -175,8 +176,7 @@ namespace Assets.Scripts.Game
             int allFieldsInGame = GetFieldsNumberInGame();
             int numberOfPawn = CalculateAmountOfPawns();
 
-            if (allFieldsInGame == numberOfPawn) return true;
-            return false;
+            return allFieldsInGame == numberOfPawn;
         }
 
         bool CheckIfIsOnlyOnePawnTypeOnBoard()
@@ -187,8 +187,7 @@ namespace Assets.Scripts.Game
                 if (item > 0) playersNumberWithAtLeastOnePawn++;
             }
 
-            if(playersNumberWithAtLeastOnePawn == 1) return true;
-            return false;
+            return playersNumberWithAtLeastOnePawn == 1;
         }
 
         private bool CheckGameOver()

@@ -24,33 +24,14 @@ namespace Assets.Scripts.Game
         }
     }
 
-    class AIPlayer : IPlayer
+    abstract class AIPlayer : IPlayer
     {
         public bool IsHuman()
         {
             return false;
         }
 
-        public void OnTurnStart(Game game)
-        {
-            IField start = FindRandomPawnOfPlayer(game);
-            IField target = FindRandomMoveForPawn(start, game);
-            game.Turn(start, target);
-        }
-
-        IField FindRandomPawnOfPlayer(Game game)
-        {
-            List<IField> pawnsOfPlayer = game.Utils().GetAllFieldsWithAvailableMoves(game.GetActivePlayer()).ToList();
-            int randomIndex1 = Random.Range(0, pawnsOfPlayer.Count());
-            return pawnsOfPlayer[randomIndex1];
-        }
-
-        IField FindRandomMoveForPawn(IField pawn, Game game)
-        {
-            List<IField> movesForRandomPawn = game.Utils().GetAvailableMovesFor(pawn.Position);
-            int randomIndex = Random.Range(0, movesForRandomPawn.Count());
-            return movesForRandomPawn[randomIndex];
-        }
+        public abstract void OnTurnStart(Game game);
     }
 
     class Players
@@ -80,7 +61,7 @@ namespace Assets.Scripts.Game
                 if (i == 0)
                     players._players.Add(new HumanPlayer());
                 else
-                    players._players.Add(new AIPlayer());
+                    players._players.Add(new GoodAI()); ///
             }
 
             return players;

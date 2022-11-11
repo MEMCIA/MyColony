@@ -54,7 +54,7 @@ namespace Assets.Scripts.Game
             return _board;
         }
 
-        public List<IField> FindEnemiesPawnsInNeighborhood(IField target)
+        public List<IField> FindEnemiesPawnsInNeighborhood(IField target, int activePlayer)
         {
             List<IField> neighbors = FindFieldsinDistance(target.Position, 1);
             List<IField> fieldWithEnemyPawns = new List<IField>();
@@ -63,7 +63,7 @@ namespace Assets.Scripts.Game
             {
                 if (n == null || n.IsEmpty()) continue;
                 if (n.Pawn == null) continue;
-                if (n.Pawn.Owner == target.Pawn.Owner) continue;
+                if (n.Pawn.Owner == activePlayer) continue;
                 fieldWithEnemyPawns.Add(n);
             }
 
