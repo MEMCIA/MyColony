@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Game
 {
-    class GoodAI: AIPlayer
+    class GoodAI : AIPlayer
     {
         override public void OnTurnStart(Game game)
         {
