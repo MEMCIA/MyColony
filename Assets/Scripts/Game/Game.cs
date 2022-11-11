@@ -45,6 +45,7 @@ namespace Assets.Scripts.Game
                 if (!SetNextActivePlayer()) _gameOver = true;
             }
             CalculateAmountOfPawns();
+            if(IsGameOver()) SetPawnOnFreeField();
         }
 
         public int GetNumberOfPlayers()

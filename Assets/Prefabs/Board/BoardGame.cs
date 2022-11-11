@@ -44,16 +44,6 @@ public class BoardGame : MonoBehaviour
         LoadStartingBoard();
     }
 
-
-    private void Update()
-    {
-        if (_game.GetGameOver())
-        {
-            _game.SetPawnOnFreeField();
-            _view.RefreshAllFields();
-        }
-    }
-
     void LoadStartingBoard()
     {
         if (StartingBoard != null)
