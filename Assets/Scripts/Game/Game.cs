@@ -28,7 +28,7 @@ namespace Assets.Scripts.Game
             return _utils;
         }
 
-        public bool GetGameOver()
+        public bool IsGameOver()
         {
             return _gameOver;
         }
@@ -45,6 +45,8 @@ namespace Assets.Scripts.Game
                 if (!SetNextActivePlayer()) _gameOver = true;
             }
             CalculateAmountOfPawns();
+            CheckGameOver();
+            if(IsGameOver()) SetPawnOnFreeField();
         }
 
         public int GetNumberOfPlayers()
@@ -174,8 +176,7 @@ namespace Assets.Scripts.Game
             int allFieldsInGame = GetFieldsNumberInGame();
             int numberOfPawn = CalculateAmountOfPawns();
 
-            if (allFieldsInGame == numberOfPawn) return true;
-            return false;
+            return allFieldsInGame == numberOfPawn;
         }
 
         bool CheckIfIsOnlyOnePawnTypeOnBoard()
@@ -186,11 +187,10 @@ namespace Assets.Scripts.Game
                 if (item > 0) playersNumberWithAtLeastOnePawn++;
             }
 
-            if (playersNumberWithAtLeastOnePawn == 1) return true;
-            return false;
+            return playersNumberWithAtLeastOnePawn == 1;
         }
 
-        public bool IsGameOver()
+        private bool CheckGameOver()
         {
             if (_gameOver)
             {
