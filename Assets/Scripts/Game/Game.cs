@@ -28,7 +28,7 @@ namespace Assets.Scripts.Game
             return _utils;
         }
 
-        public bool GetGameOver()
+        public bool IsGameOver()
         {
             return _gameOver;
         }
@@ -45,6 +45,7 @@ namespace Assets.Scripts.Game
                 if (!SetNextActivePlayer()) _gameOver = true;
             }
             CalculateAmountOfPawns();
+            CheckGameOver();
         }
 
         public int GetNumberOfPlayers()
@@ -190,7 +191,7 @@ namespace Assets.Scripts.Game
             return false;
         }
 
-        public bool IsGameOver()
+        private bool CheckGameOver()
         {
             if (_gameOver) 
             {

@@ -47,7 +47,7 @@ public class BoardGame : MonoBehaviour
 
     private void Update()
     {
-        if (_game.GetGameOver())
+        if (_game.IsGameOver())
         {
             _game.SetPawnOnFreeField();
             _view.RefreshAllFields();
