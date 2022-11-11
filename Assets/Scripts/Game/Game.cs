@@ -175,8 +175,7 @@ namespace Assets.Scripts.Game
             int allFieldsInGame = GetFieldsNumberInGame();
             int numberOfPawn = CalculateAmountOfPawns();
 
-            if (allFieldsInGame == numberOfPawn) return true;
-            return false;
+            return allFieldsInGame == numberOfPawn;
         }
 
         bool CheckIfIsOnlyOnePawnTypeOnBoard()
@@ -187,8 +186,7 @@ namespace Assets.Scripts.Game
                 if (item > 0) playersNumberWithAtLeastOnePawn++;
             }
 
-            if(playersNumberWithAtLeastOnePawn == 1) return true;
-            return false;
+            return playersNumberWithAtLeastOnePawn == 1;
         }
 
         public bool IsGameOver()
