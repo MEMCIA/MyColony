@@ -9,6 +9,8 @@ namespace Assets.Scripts.Game
             Position = position;
         }
 
+        public bool IsObstacle { get; } = false;
+
         // position of this field
         public Vector2Int Position { get; }
 
@@ -18,7 +20,7 @@ namespace Assets.Scripts.Game
         // is field emtpy, and can be moved into?
         public bool IsEmpty()
         {
-            if (Pawn == null) return true;
+            if (Pawn == null && !IsObstacle) return true;
 
             return false;
         }
