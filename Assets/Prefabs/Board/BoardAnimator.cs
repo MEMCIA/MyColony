@@ -66,9 +66,18 @@ public class BoardAnimator : MonoBehaviour
         var pawn = target.Pawn.gameObject;
         pawn.transform.position = start.PawnPosition.position;
 
-        yield return pawn.transform
-            .DOMove(target.PawnPosition.position, duration)
-            .WaitForCompletion();
+        if (move.Jump)
+        {
+            yield return pawn.transform
+                .DOJump(target.PawnPosition.position, 1, 1, duration)
+                .WaitForCompletion();
+        }
+        else
+        {
+            yield return pawn.transform
+                .DOMove(target.PawnPosition.position, duration)
+                .WaitForCompletion();
+        }
     }
 
     IEnumerator AnimateCapture(Move move)
