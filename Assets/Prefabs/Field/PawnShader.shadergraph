@@ -184,9 +184,9 @@
     "m_Guid": {
         "m_GuidSerialized": "4bb56bf1-954f-4f8e-9de1-f63c9f354f73"
     },
-    "m_Name": "Selected",
+    "m_Name": "Highlighted",
     "m_DefaultReferenceName": "Vector1_1a759177af364e1b90b296ae282f485e",
-    "m_OverrideReferenceName": "_Selected",
+    "m_OverrideReferenceName": "_Highlighted",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -283,7 +283,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "4034e74107694c9db94748e3f6d15d7e",
     "m_Id": 0,
-    "m_DisplayName": "Selected",
+    "m_DisplayName": "Highlighted",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

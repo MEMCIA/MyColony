@@ -14,13 +14,15 @@ public class FieldView : MonoBehaviour
 
     public List<Color> PawnColors;
     public Color PawnSelectedColor = Color.white;
-    public Material FieldSelectedMaterial;
+    public Material FieldHighlightedMaterial;
+    public Material FieldTargetableMaterial;
 
-    protected static int PROPERTY_SELECTED = Shader.PropertyToID("_Selected");
+    protected static int PROPERTY_HIGHLIGHTED = Shader.PropertyToID("_Highlighted");
 
     Material _standardFieldMaterial;
 
-    bool _fieldSelected;
+    bool _fieldHighlighted;
+    bool _fieldTargetable;
     IField _fieldModel;
 
     private void Start()
@@ -70,14 +72,30 @@ public class FieldView : MonoBehaviour
         return _fieldModel;
     }
 
-    public void SetFieldSelected(bool selected)
+    public void SetFieldHighlighted(bool selected)
     {
-        _fieldSelected = selected;
-        Field.sharedMaterial = _fieldSelected ? FieldSelectedMaterial : _standardFieldMaterial;
+        _fieldHighlighted = selected;
+        UpdateFieldMaterial();
+
+    }
+    public void SetTargetable(bool targetable)
+    {
+        _fieldTargetable = targetable;
+        UpdateFieldMaterial();
     }
 
-    public void SetPawnSelected(bool selected)
+    public void SetPawnHighlighted(bool selected)
     {
-        Pawn.material.SetFloat(PROPERTY_SELECTED, selected ? 1 : 0);
+        Pawn.material.SetFloat(PROPERTY_HIGHLIGHTED, selected ? 1 : 0);
+    }
+
+    void UpdateFieldMaterial()
+    {
+        if (_fieldHighlighted)
+            Field.sharedMaterial = FieldHighlightedMaterial;
+        else if (_fieldTargetable)
+            Field.sharedMaterial = FieldTargetableMaterial;
+        else
+            Field.sharedMaterial = _standardFieldMaterial;
     }
 }
