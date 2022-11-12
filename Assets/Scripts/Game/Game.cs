@@ -119,7 +119,7 @@ namespace Assets.Scripts.Game
 
         void ChangeOwnerOfNeighboringPawns(IField target)
         {
-            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target,_activePlayer);
+            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target, _activePlayer);
 
             foreach (var f in fieldWithEnemyPawns)
             {
@@ -152,11 +152,11 @@ namespace Assets.Scripts.Game
 
             for (int i = 0; i < _numberOfPlayers; i++)
                 _pawnsOfPlayer[i] = 0;
-            
+
             foreach (var field in _board.GetAllFields())
             {
                 if (field.Pawn == null) continue;
-                _pawnsOfPlayer[field.Pawn.Owner] ++;
+                _pawnsOfPlayer[field.Pawn.Owner]++;
                 numberOfPawns++;
             }
 
@@ -192,7 +192,7 @@ namespace Assets.Scripts.Game
 
         private bool CheckGameOver()
         {
-            if (_gameOver) 
+            if (_gameOver)
             {
                 Debug.Log("Game Over");
                 return true;
@@ -202,7 +202,7 @@ namespace Assets.Scripts.Game
             bool isOnlyOneTypeOfPawnsOnBoard = CheckIfIsOnlyOnePawnTypeOnBoard();
 
             if (areAllFieldsOccupied || isOnlyOneTypeOfPawnsOnBoard) _gameOver = true;
-            if(_gameOver) Debug.Log("Game Over");
+            if (_gameOver) Debug.Log("Game Over");
 
             return _gameOver;
         }
@@ -210,7 +210,7 @@ namespace Assets.Scripts.Game
         IField FindEmptyField()
         {
             List<IField> fields = _board.GetAllFields();
-            
+
             foreach (var field in fields)
             {
                 if (field.IsEmpty()) return field;
