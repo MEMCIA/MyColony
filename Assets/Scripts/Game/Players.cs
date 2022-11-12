@@ -1,7 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace Assets.Scripts.Game
 {
@@ -50,7 +48,7 @@ namespace Assets.Scripts.Game
             return players;
         }
 
-        static public Players CreateHumanAndAIs(Game game)
+        static public Players CreateHumanAndAIs(Game game, AIPlayer ai)
         {
             int numerOfPlayers = game.GetNumberOfPlayers();
             var players = new Players(game);
@@ -60,7 +58,7 @@ namespace Assets.Scripts.Game
                 if (i == 0)
                     players._players.Add(new HumanPlayer());
                 else
-                    players._players.Add(new GoodAI()); ///
+                    players._players.Add(ai);
             }
 
             return players;

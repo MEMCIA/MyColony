@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class BoardGame : MonoBehaviour
 {
+    public enum Mode
+    {
+        EasyAI,
+        StandardAI,
+        Humans
+    }
+
     public static Board StartingBoard;
-    public static bool WithAI = false;
+    public static Mode CurrentMode { get; internal set; }
     public static BoardGame CurrentGame;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
@@ -71,13 +78,28 @@ public class BoardGame : MonoBehaviour
         _board = board;
         _game = new Game(_board);
         _game.OnMoveMade.AddListener(move => _pendingMoves.Add(move));
-        if (WithAI)
-            _players = Players.CreateHumanAndAIs(_game);
-        else
-            _players = Players.CreateHumans(_game);
+
+        CreatePlayers();
+
         _view.SetBoard(board);
         _players.OnTurnStart();
         _view.RefreshAllFields();
+    }
+
+    void CreatePlayers()
+    {
+        switch (CurrentMode)
+        {
+            case Mode.EasyAI:
+                _players = Players.CreateHumanAndAIs(_game, new SimpleAI());
+                break;
+            case Mode.StandardAI:
+                _players = Players.CreateHumanAndAIs(_game, new GoodAI());
+                break;
+            case Mode.Humans:
+                _players = Players.CreateHumans(_game);
+                break;
+        }
     }
 
     public Board GetBoard()
