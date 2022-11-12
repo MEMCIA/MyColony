@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Assets.Scripts.Game
 {
     class Game
     {
+        public UnityEvent<Move> OnMoveMade = new UnityEvent<Move>();
         IBoard _board;
         GameUtils _utils;
         int _numberOfPlayers = 2;
@@ -46,7 +46,7 @@ namespace Assets.Scripts.Game
             }
             CalculateAmountOfPawns();
             CheckGameOver();
-            if(IsGameOver()) SetPawnOnFreeField();
+            if (IsGameOver()) SetPawnOnFreeField();
         }
 
         public int GetNumberOfPlayers()
@@ -107,24 +107,36 @@ namespace Assets.Scripts.Game
             if (!IsValidMove(start, target))
                 return false;
 
-            _board.PlacePawnAt(target.Position, start.Pawn.Owner);
+            int owner = start.Pawn.Owner;
+            bool jump = false;
+
+            _board.PlacePawnAt(target.Position, owner);
 
             int distanceBetween = _utils.CheckDistanceBetween(start, target);
             if (CheckIfStartPawnMustBeDeleted(distanceBetween))
+            {
+                jump = true;
                 _board.RemovePawn(start.Position);
+            }
 
-            ChangeOwnerOfNeighboringPawns(target);
+            var capturedFields = ChangeOwnerOfNeighboringPawns(target);
+
+            var move = new Move(owner, jump, start, target, capturedFields);
+            OnMoveMade.Invoke(move);
+
             return true;
         }
 
-        void ChangeOwnerOfNeighboringPawns(IField target)
+        List<IField> ChangeOwnerOfNeighboringPawns(IField target)
         {
-            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target, _activePlayer);
+            List<IField> fieldsWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target, _activePlayer);
 
-            foreach (var f in fieldWithEnemyPawns)
+            foreach (var f in fieldsWithEnemyPawns)
             {
                 f.Pawn.SetOwner(target.Pawn.Owner);
             }
+
+            return fieldsWithEnemyPawns;
         }
 
         bool CheckIfStartPawnMustBeDeleted(int distanceBetween)

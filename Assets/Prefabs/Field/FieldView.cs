@@ -8,6 +8,7 @@ public class FieldView : MonoBehaviour
     [System.NonSerialized]
     public Vector2Int Position;
 
+    public Transform PawnPosition;
     public MeshRenderer Field;
     public MeshRenderer Pawn;
 
@@ -29,6 +30,27 @@ public class FieldView : MonoBehaviour
         Refresh();
     }
 
+    public Color ColorForPlayer(int playerIndex)
+    {
+        return PawnColors[playerIndex % PawnColors.Count];
+    }
+
+    public void HidePawn()
+    {
+        Pawn.gameObject.SetActive(false);
+    }
+
+    public void ShowPawn(int playerIndex)
+    {
+        Pawn.gameObject.SetActive(true);
+        Pawn.material.color = ColorForPlayer(playerIndex);
+    }
+
+    public Material GetPawnMaterial()
+    {
+        return Pawn.material;
+    }
+
     public void Refresh()
     {
         if (_fieldModel == null)
@@ -45,7 +67,7 @@ public class FieldView : MonoBehaviour
             }
             else
             {
-                Pawn.material.color = PawnColors[pawn.Owner % PawnColors.Count];
+                Pawn.material.color = ColorForPlayer(pawn.Owner);
             }
 
         }

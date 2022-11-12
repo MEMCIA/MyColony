@@ -1,4 +1,5 @@
 using Assets.Scripts.Game;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardGame : MonoBehaviour
@@ -12,14 +13,17 @@ public class BoardGame : MonoBehaviour
     Game _game;
     Board _board;
     BoardView _view;
+    BoardAnimator _animator;
     Players _players;
 
     IField _selectedPawnField;
+    List<Move> _pendingMoves = new List<Move>();
 
     void Awake()
     {
         CurrentGame = this;
 
+        _animator = GetComponent<BoardAnimator>();
         _view = GetComponent<BoardView>();
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
@@ -64,6 +68,7 @@ public class BoardGame : MonoBehaviour
     {
         _board = board;
         _game = new Game(_board);
+        _game.OnMoveMade.AddListener(move => _pendingMoves.Add(move));
         if (WithAI)
             _players = Players.CreateHumanAndAIs(_game);
         else
@@ -80,6 +85,9 @@ public class BoardGame : MonoBehaviour
 
     void OnFieldClicked(IField field)
     {
+        if (_animator.IsAnimating)
+            return;
+
         Debug.Log($"Clicked on field {field.Position}");
         if (_selectedPawnField != null)
         {
@@ -90,15 +98,26 @@ public class BoardGame : MonoBehaviour
 
     void OnPawnClicked(IField field)
     {
+        if (_animator.IsAnimating)
+            return;
+
         Debug.Log($"Clicked on pawn {field.Position}");
         _selectedPawnField = field;
     }
 
     void MakeAMove(IField start, IField target)
     {
+        if (_animator.IsAnimating)
+            return;
+
+        // this will cause game to send OnMoveMade events, which will cause Move to be added to  _pendingMoves
         _game.Turn(start, target);
+        // this will change turn to next player, if this player is an AI it will immediately make it's move
         _players.OnTurnStart();
-        _view.RefreshAllFields();
+
+        // animate all collected human & AI moves moves
+        _animator.AnimateMoves(_pendingMoves);
+        _pendingMoves.Clear();
     }
 
     bool IsCurrentPlayerHuman()
