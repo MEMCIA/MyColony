@@ -29,23 +29,25 @@ public class BoardGame : MonoBehaviour
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
 
-        // only hilight pawns of current player
+        // only highlight pawns of current player
         _view.PawnSelectionFilter = (IField field) =>
         {
             if (!IsCurrentPlayerHuman()) return false;
             return field.Pawn.Owner == _game.GetActivePlayer();
         };
 
-        // only hilight fields if pawn is selected, and field is a valid move
-        _view.FieldSelectionFilter = (IField field) =>
-        {
-            if (!IsCurrentPlayerHuman()) return false;
-            if (_selectedPawnField == null)
-                return false;
-            return _game.IsValidMove(_selectedPawnField, field);
-        };
+        // only highlight fields if pawn is selected, and field is a valid move
+        _view.FieldSelectionFilter = IsFieldValidMoveTarget;
 
         LoadStartingBoard();
+    }
+
+    bool IsFieldValidMoveTarget(IField field)
+    {
+        if (!IsCurrentPlayerHuman()) return false;
+        if (_selectedPawnField == null)
+            return false;
+        return _game.IsValidMove(_selectedPawnField, field);
     }
 
     void LoadStartingBoard()
@@ -92,7 +94,7 @@ public class BoardGame : MonoBehaviour
         if (_selectedPawnField != null)
         {
             MakeAMove(_selectedPawnField, field);
-            _selectedPawnField = null;
+            SetSelectedPawnField(null);
         }
     }
 
@@ -102,7 +104,7 @@ public class BoardGame : MonoBehaviour
             return;
 
         Debug.Log($"Clicked on pawn {field.Position}");
-        _selectedPawnField = field;
+        SetSelectedPawnField(field);
     }
 
     void MakeAMove(IField start, IField target)
@@ -118,6 +120,12 @@ public class BoardGame : MonoBehaviour
         // animate all collected human & AI moves moves
         _animator.AnimateMoves(_pendingMoves);
         _pendingMoves.Clear();
+    }
+
+    void SetSelectedPawnField(IField field)
+    {
+        _selectedPawnField = field;
+        _view.UpdateTargetableFields();
     }
 
     bool IsCurrentPlayerHuman()

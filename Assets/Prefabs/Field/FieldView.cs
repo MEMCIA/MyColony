@@ -14,12 +14,15 @@ public class FieldView : MonoBehaviour
 
     public List<Color> PawnColors;
     public Color PawnSelectedColor = Color.white;
-    public Material FieldSelectedMaterial;
+    public Material FieldHighlightedMaterial;
+    public Material FieldTargetableMaterial;
+
+    protected static int PROPERTY_HIGHLIGHTED = Shader.PropertyToID("_Highlighted");
 
     Material _standardFieldMaterial;
 
-    bool _fieldSelected;
-    bool _pawnSelected;
+    bool _fieldHighlighted;
+    bool _fieldTargetable;
     IField _fieldModel;
 
     private void Start()
@@ -60,16 +63,7 @@ public class FieldView : MonoBehaviour
         Pawn.gameObject.SetActive(pawn != null);
         if (pawn != null)
         {
-            // set color for pawn
-            if (_pawnSelected)
-            {
-                Pawn.material.color = PawnSelectedColor;
-            }
-            else
-            {
-                Pawn.material.color = ColorForPlayer(pawn.Owner);
-            }
-
+            Pawn.material.color = ColorForPlayer(pawn.Owner);
         }
     }
 
@@ -78,15 +72,30 @@ public class FieldView : MonoBehaviour
         return _fieldModel;
     }
 
-    public void SetFieldSelected(bool selected)
+    public void SetFieldHighlighted(bool selected)
     {
-        _fieldSelected = selected;
-        Field.sharedMaterial = _fieldSelected ? FieldSelectedMaterial : _standardFieldMaterial;
+        _fieldHighlighted = selected;
+        UpdateFieldMaterial();
+
+    }
+    public void SetTargetable(bool targetable)
+    {
+        _fieldTargetable = targetable;
+        UpdateFieldMaterial();
     }
 
-    public void SetPawnSelected(bool selected)
+    public void SetPawnHighlighted(bool selected)
     {
-        _pawnSelected = selected;
-        Refresh();
+        Pawn.material.SetFloat(PROPERTY_HIGHLIGHTED, selected ? 1 : 0);
+    }
+
+    void UpdateFieldMaterial()
+    {
+        if (_fieldHighlighted)
+            Field.sharedMaterial = FieldHighlightedMaterial;
+        else if (_fieldTargetable)
+            Field.sharedMaterial = FieldTargetableMaterial;
+        else
+            Field.sharedMaterial = _standardFieldMaterial;
     }
 }

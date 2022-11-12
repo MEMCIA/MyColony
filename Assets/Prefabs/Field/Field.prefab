@@ -55,7 +55,8 @@ MonoBehaviour:
   - {r: 0.9509299, g: 1, b: 0, a: 1}
   - {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
   PawnSelectedColor: {r: 1, g: 1, b: 1, a: 1}
-  FieldSelectedMaterial: {fileID: 2100000, guid: fb810ad0d3dfd35449a5b140de40b95f, type: 2}
+  FieldHighlightedMaterial: {fileID: 2100000, guid: fb810ad0d3dfd35449a5b140de40b95f, type: 2}
+  FieldTargetableMaterial: {fileID: 2100000, guid: b8abb3b31cb538841b1bab62c69ed976, type: 2}
 --- !u!65 &8238613485101017999
 BoxCollider:
   m_ObjectHideFlags: 0

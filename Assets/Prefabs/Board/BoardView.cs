@@ -74,10 +74,10 @@ public class BoardView : MonoBehaviour
         if (_currentField != field)
         {
             if (_currentField)
-                _currentField.SetFieldSelected(false);
+                _currentField.SetFieldHighlighted(false);
             _currentField = field;
             if (_currentField)
-                _currentField.SetFieldSelected(true);
+                _currentField.SetFieldHighlighted(true);
 
             OnFieldHover.Invoke(fieldModel);
         }
@@ -96,10 +96,10 @@ public class BoardView : MonoBehaviour
         if (_currentPawn != field)
         {
             if (_currentPawn)
-                _currentPawn.SetPawnSelected(false);
+                _currentPawn.SetPawnHighlighted(false);
             _currentPawn = field;
             if (_currentPawn)
-                _currentPawn.SetPawnSelected(true);
+                _currentPawn.SetPawnHighlighted(true);
 
             OnPawnHover.Invoke(_currentPawn ? _currentPawn.GetField() : null);
         }
@@ -129,6 +129,17 @@ public class BoardView : MonoBehaviour
                 return field;
         }
         return null;
+    }
+
+    internal void UpdateTargetableFields()
+    {
+        foreach (var field in _fields)
+        {
+            bool targetable = true;
+            if (FieldSelectionFilter != null && !FieldSelectionFilter(field.GetField()))
+                targetable = false;
+            field.SetTargetable(targetable);
+        }
     }
 
     public void RefreshField(Vector2Int position)
