@@ -16,10 +16,11 @@ public class FieldView : MonoBehaviour
     public Color PawnSelectedColor = Color.white;
     public Material FieldSelectedMaterial;
 
+    protected static int PROPERTY_SELECTED = Shader.PropertyToID("_Selected");
+
     Material _standardFieldMaterial;
 
     bool _fieldSelected;
-    bool _pawnSelected;
     IField _fieldModel;
 
     private void Start()
@@ -60,16 +61,7 @@ public class FieldView : MonoBehaviour
         Pawn.gameObject.SetActive(pawn != null);
         if (pawn != null)
         {
-            // set color for pawn
-            if (_pawnSelected)
-            {
-                Pawn.material.color = PawnSelectedColor;
-            }
-            else
-            {
-                Pawn.material.color = ColorForPlayer(pawn.Owner);
-            }
-
+            Pawn.material.color = ColorForPlayer(pawn.Owner);
         }
     }
 
@@ -86,7 +78,6 @@ public class FieldView : MonoBehaviour
 
     public void SetPawnSelected(bool selected)
     {
-        _pawnSelected = selected;
-        Refresh();
+        Pawn.material.SetFloat(PROPERTY_SELECTED, selected ? 1 : 0);
     }
 }
