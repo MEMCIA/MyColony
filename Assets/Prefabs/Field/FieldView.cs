@@ -8,6 +8,7 @@ public class FieldView : MonoBehaviour
     [System.NonSerialized]
     public Vector2Int Position;
 
+    public Transform PawnPosition;
     public MeshRenderer Field;
     public MeshRenderer Pawn;
 
@@ -27,6 +28,17 @@ public class FieldView : MonoBehaviour
         if (BoardModel != null)
             _fieldModel = BoardModel.GetField(Position);
         Refresh();
+    }
+
+    public void HidePawn()
+    {
+        Pawn.gameObject.SetActive(false);
+    }
+
+    public void ShowPawn(int playerIndex)
+    {
+        Pawn.gameObject.SetActive(true);
+        Pawn.material.color = PawnColors[playerIndex % PawnColors.Count];
     }
 
     public void Refresh()

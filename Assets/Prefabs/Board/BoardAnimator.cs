@@ -1,10 +1,14 @@
 using Assets.Scripts.Game;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardAnimator : MonoBehaviour
 {
+    public float MoveSpeed = 0.2f;
+    public float DelayAfterMove = 0.2f;
+
     public bool IsAnimating { get; private set; }
     BoardView _view;
     Coroutine _currentAnimation;
@@ -36,16 +40,14 @@ public class BoardAnimator : MonoBehaviour
         {
             yield return AnimateMove(move);
         }
+
+        _view.RefreshAllFields();
         IsAnimating = false;
     }
 
     IEnumerator AnimateMove(Move move)
     {
-        var start = _view.FieldViewForPosition(move.Start.Position);
-        var target = _view.FieldViewForPosition(move.Target.Position);
-
-        start.Refresh();
-        target.Refresh();
+        yield return AnimatePawnMove(move, MoveSpeed);
 
         if (move.CapturedFields.Count > 0)
             yield return new WaitForSeconds(0.1f);
@@ -53,10 +55,28 @@ public class BoardAnimator : MonoBehaviour
         foreach (var captured in move.CapturedFields)
         {
             var capturedField = _view.FieldViewForPosition(captured.Position);
-            capturedField.Refresh();
+            capturedField.ShowPawn(move.Owner);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(DelayAfterMove);
+    }
+
+    IEnumerator AnimatePawnMove(Move move, float duration)
+    {
+        var start = _view.FieldViewForPosition(move.Start.Position);
+        var target = _view.FieldViewForPosition(move.Target.Position);
+
+        if (move.Jump)
+            start.HidePawn();
+
+        target.ShowPawn(move.Owner);
+
+        var pawn = target.Pawn.gameObject;
+        pawn.transform.position = start.PawnPosition.position;
+
+        yield return pawn.transform
+            .DOMove(target.PawnPosition.position, duration)
+            .WaitForCompletion();
     }
 
 }
