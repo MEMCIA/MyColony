@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Game
 {
-    class Move
+    public class Move
     {
         public Move(int owner, bool jump, IField start, IField target, List<IField> capturedFields)
         {

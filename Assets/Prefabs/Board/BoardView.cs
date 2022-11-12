@@ -143,7 +143,7 @@ public class BoardView : MonoBehaviour
             field.Refresh();
     }
 
-    FieldView FieldViewForPosition(Vector2Int position)
+    public FieldView FieldViewForPosition(Vector2Int position)
     {
         return _fields[position.x + position.y * _dimensions.x];
     }
