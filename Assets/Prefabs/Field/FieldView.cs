@@ -30,6 +30,11 @@ public class FieldView : MonoBehaviour
         Refresh();
     }
 
+    public Color ColorForPlayer(int playerIndex)
+    {
+        return PawnColors[playerIndex % PawnColors.Count];
+    }
+
     public void HidePawn()
     {
         Pawn.gameObject.SetActive(false);
@@ -38,7 +43,12 @@ public class FieldView : MonoBehaviour
     public void ShowPawn(int playerIndex)
     {
         Pawn.gameObject.SetActive(true);
-        Pawn.material.color = PawnColors[playerIndex % PawnColors.Count];
+        Pawn.material.color = ColorForPlayer(playerIndex);
+    }
+
+    public Material GetPawnMaterial()
+    {
+        return Pawn.material;
     }
 
     public void Refresh()
@@ -57,7 +67,7 @@ public class FieldView : MonoBehaviour
             }
             else
             {
-                Pawn.material.color = PawnColors[pawn.Owner % PawnColors.Count];
+                Pawn.material.color = ColorForPlayer(pawn.Owner);
             }
 
         }

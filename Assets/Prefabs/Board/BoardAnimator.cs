@@ -7,6 +7,7 @@ using UnityEngine;
 public class BoardAnimator : MonoBehaviour
 {
     public float MoveSpeed = 0.2f;
+    public float CaptureSpeed = 0.2f;
     public float DelayAfterMove = 0.2f;
 
     public bool IsAnimating { get; private set; }
@@ -48,16 +49,7 @@ public class BoardAnimator : MonoBehaviour
     IEnumerator AnimateMove(Move move)
     {
         yield return AnimatePawnMove(move, MoveSpeed);
-
-        if (move.CapturedFields.Count > 0)
-            yield return new WaitForSeconds(0.1f);
-
-        foreach (var captured in move.CapturedFields)
-        {
-            var capturedField = _view.FieldViewForPosition(captured.Position);
-            capturedField.ShowPawn(move.Owner);
-        }
-
+        yield return AnimateCapture(move);
         yield return new WaitForSeconds(DelayAfterMove);
     }
 
@@ -77,6 +69,28 @@ public class BoardAnimator : MonoBehaviour
         yield return pawn.transform
             .DOMove(target.PawnPosition.position, duration)
             .WaitForCompletion();
+    }
+
+    IEnumerator AnimateCapture(Move move)
+    {
+        if (move.CapturedFields.Count <= 0)
+            yield break;
+
+        yield return new WaitForSeconds(0.1f);
+
+        Sequence sequence = DOTween.Sequence();
+
+        foreach (var captured in move.CapturedFields)
+        {
+            var capturedField = _view.FieldViewForPosition(captured.Position);
+            var pawnMaterial = capturedField.GetPawnMaterial();
+            var targetColor = capturedField.ColorForPlayer(move.Owner);
+
+            var tween = pawnMaterial.DOColor(targetColor, CaptureSpeed);
+            sequence.Insert(0, tween);
+        }
+
+        yield return sequence.WaitForCompletion();
     }
 
 }
