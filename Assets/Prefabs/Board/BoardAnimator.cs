@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class BoardAnimator : MonoBehaviour
 {
+    public bool IsAnimating { get; private set; }
     BoardView _view;
+    Coroutine _currentAnimation;
 
     void Awake()
     {
@@ -14,7 +16,18 @@ public class BoardAnimator : MonoBehaviour
 
     public void AnimateMoves(List<Move> moves)
     {
-        StartCoroutine(AsyncAnimateMoves(new List<Move>(moves)));
+        if (IsAnimating)
+        {
+            Debug.LogWarning("BoardAnimator still is animating previous moves!");
+            if (_currentAnimation != null)
+                StopCoroutine(_currentAnimation);
+
+            _view.RefreshAllFields();
+            return;
+        }
+
+        IsAnimating = true;
+        _currentAnimation = StartCoroutine(AsyncAnimateMoves(new List<Move>(moves)));
     }
 
     IEnumerator AsyncAnimateMoves(List<Move> moves)
@@ -23,6 +36,7 @@ public class BoardAnimator : MonoBehaviour
         {
             yield return AnimateMove(move);
         }
+        IsAnimating = false;
     }
 
     IEnumerator AnimateMove(Move move)
@@ -33,11 +47,15 @@ public class BoardAnimator : MonoBehaviour
         start.Refresh();
         target.Refresh();
 
+        if (move.CapturedFields.Count > 0)
+            yield return new WaitForSeconds(0.1f);
+
         foreach (var captured in move.CapturedFields)
         {
             var capturedField = _view.FieldViewForPosition(captured.Position);
             capturedField.Refresh();
         }
+
         yield return new WaitForSeconds(0.5f);
     }
 

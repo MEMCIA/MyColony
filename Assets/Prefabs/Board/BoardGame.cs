@@ -85,6 +85,9 @@ public class BoardGame : MonoBehaviour
 
     void OnFieldClicked(IField field)
     {
+        if (_animator.IsAnimating)
+            return;
+
         Debug.Log($"Clicked on field {field.Position}");
         if (_selectedPawnField != null)
         {
@@ -95,12 +98,18 @@ public class BoardGame : MonoBehaviour
 
     void OnPawnClicked(IField field)
     {
+        if (_animator.IsAnimating)
+            return;
+
         Debug.Log($"Clicked on pawn {field.Position}");
         _selectedPawnField = field;
     }
 
     void MakeAMove(IField start, IField target)
     {
+        if (_animator.IsAnimating)
+            return;
+
         // this will cause game to send OnMoveMade events, which will cause Move to be added to  _pendingMoves
         _game.Turn(start, target);
         // this will change turn to next player, if this player is an AI it will immediately make it's move
