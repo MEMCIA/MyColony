@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.Game
 {
     class Game
     {
+        public UnityEvent<Move> OnMoveMade = new UnityEvent<Move>();
         IBoard _board;
         GameUtils _utils;
         int _numberOfPlayers = 2;
@@ -46,7 +48,7 @@ namespace Assets.Scripts.Game
             }
             CalculateAmountOfPawns();
             CheckGameOver();
-            if(IsGameOver()) SetPawnOnFreeField();
+            if (IsGameOver()) SetPawnOnFreeField();
         }
 
         public int GetNumberOfPlayers()
@@ -107,24 +109,36 @@ namespace Assets.Scripts.Game
             if (!IsValidMove(start, target))
                 return false;
 
-            _board.PlacePawnAt(target.Position, start.Pawn.Owner);
+            int owner = start.Pawn.Owner;
+            bool jump = false;
+
+            _board.PlacePawnAt(target.Position, owner);
 
             int distanceBetween = _utils.CheckDistanceBetween(start, target);
             if (CheckIfStartPawnMustBeDeleted(distanceBetween))
+            {
+                jump = true;
                 _board.RemovePawn(start.Position);
+            }
 
-            ChangeOwnerOfNeighboringPawns(target);
+            var capturedFields = ChangeOwnerOfNeighboringPawns(target);
+
+            var move = new Move(owner, jump, start, target, capturedFields);
+            OnMoveMade.Invoke(move);
+
             return true;
         }
 
-        void ChangeOwnerOfNeighboringPawns(IField target)
+        List<IField> ChangeOwnerOfNeighboringPawns(IField target)
         {
-            List<IField> fieldWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target,_activePlayer);
+            List<IField> fieldsWithEnemyPawns = _utils.FindEnemiesPawnsInNeighborhood(target, _activePlayer);
 
-            foreach (var f in fieldWithEnemyPawns)
+            foreach (var f in fieldsWithEnemyPawns)
             {
                 f.Pawn.SetOwner(target.Pawn.Owner);
             }
+
+            return fieldsWithEnemyPawns;
         }
 
         bool CheckIfStartPawnMustBeDeleted(int distanceBetween)
@@ -152,11 +166,11 @@ namespace Assets.Scripts.Game
 
             for (int i = 0; i < _numberOfPlayers; i++)
                 _pawnsOfPlayer[i] = 0;
-            
+
             foreach (var field in _board.GetAllFields())
             {
                 if (field.Pawn == null) continue;
-                _pawnsOfPlayer[field.Pawn.Owner] ++;
+                _pawnsOfPlayer[field.Pawn.Owner]++;
                 numberOfPawns++;
             }
 
@@ -192,7 +206,7 @@ namespace Assets.Scripts.Game
 
         private bool CheckGameOver()
         {
-            if (_gameOver) 
+            if (_gameOver)
             {
                 Debug.Log("Game Over");
                 return true;
@@ -202,7 +216,7 @@ namespace Assets.Scripts.Game
             bool isOnlyOneTypeOfPawnsOnBoard = CheckIfIsOnlyOnePawnTypeOnBoard();
 
             if (areAllFieldsOccupied || isOnlyOneTypeOfPawnsOnBoard) _gameOver = true;
-            if(_gameOver) Debug.Log("Game Over");
+            if (_gameOver) Debug.Log("Game Over");
 
             return _gameOver;
         }
@@ -210,7 +224,7 @@ namespace Assets.Scripts.Game
         IField FindEmptyField()
         {
             List<IField> fields = _board.GetAllFields();
-            
+
             foreach (var field in fields)
             {
                 if (field.IsEmpty()) return field;
