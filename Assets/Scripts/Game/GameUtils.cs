@@ -43,8 +43,8 @@ namespace Assets.Scripts.Game
             IEnumerable<IField> fieldsWithPawnsOfPlayer = FindPawnsThatBelongsToPlayer(player);
 
             var allFieldsWithAvailabeMoves = from a in fieldsWithPawnsOfPlayer
-                                   where GetAvailableMovesFor(a.Position).Count > 0
-                                   select a;
+                                             where GetAvailableMovesFor(a.Position).Count > 0
+                                             select a;
 
             return allFieldsWithAvailabeMoves;
         }
@@ -91,7 +91,7 @@ namespace Assets.Scripts.Game
             return finalAvailableMoves;
         }
 
-        List<IField> FindFieldsinDistance(Vector2Int position, int distance)
+        public List<IField> FindFieldsinDistance(Vector2Int position, int distance)
         {
             int length = distance * 2 + 1;
             Vector2Int positionOfLeftDownAvailableField = new Vector2Int(position.x - distance, position.y - distance);

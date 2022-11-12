@@ -30,7 +30,6 @@ namespace Assets.Scripts.Game
         {
             return false;
         }
-
         public abstract void OnTurnStart(Game game);
     }
 
