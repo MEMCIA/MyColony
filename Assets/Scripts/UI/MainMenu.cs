@@ -29,6 +29,6 @@ public class MainMenu : MonoBehaviour
         var selectedLevel = Levels[LevelSelect.value];
         BoardGame.StartingBoard = selectedLevel.Load();
         BoardGame.WithAI = AIToggle.isOn;
-        SceneManager.LoadScene("Assets/Test/Scenes/GamePlay.unity");
+        SceneManager.LoadScene("Assets/Scenes/GamePlay.unity");
     }
 }
