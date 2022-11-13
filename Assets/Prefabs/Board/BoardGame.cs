@@ -1,6 +1,7 @@
 using Assets.Scripts.Game;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardGame : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class BoardGame : MonoBehaviour
     public static Board StartingBoard;
     public static Mode CurrentMode { get; internal set; }
     public static BoardGame CurrentGame;
+    public Text TheEnd;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
 
@@ -22,6 +24,7 @@ public class BoardGame : MonoBehaviour
     BoardView _view;
     BoardAnimator _animator;
     Players _players;
+    GameObject _theEnd;
 
     IField _selectedPawnField;
     List<Move> _pendingMoves = new List<Move>();
@@ -30,6 +33,7 @@ public class BoardGame : MonoBehaviour
     {
         CurrentGame = this;
 
+        _theEnd = TheEnd.GetComponent<GameObject>();
         _animator = GetComponent<BoardAnimator>();
         _view = GetComponent<BoardView>();
         _view.OnFieldClicked.AddListener(OnFieldClicked);
@@ -142,6 +146,18 @@ public class BoardGame : MonoBehaviour
         // animate all collected human & AI moves moves
         _animator.AnimateMoves(_pendingMoves);
         _pendingMoves.Clear();
+
+        if(_game.IsGameOver())
+        {
+            Debug.Log("GameOver BoardGame");
+            HandleGameOver();
+        }
+    }
+
+    void HandleGameOver()
+    {
+        TheEnd.enabled = true;
+        TheEnd.gameObject.SetActive(true);
     }
 
     void SetSelectedPawnField(IField field)

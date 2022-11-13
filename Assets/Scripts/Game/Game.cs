@@ -48,7 +48,13 @@ namespace Assets.Scripts.Game
             }
             CalculateAmountOfPawns();
             CheckGameOver();
-            if (IsGameOver()) SetPawnOnFreeField();
+            if (IsGameOver())
+            {
+                while(!CheckIfAllFieldsAreOccupied())
+                {
+                    SetPawnOnFreeField();
+                }
+            }
         }
 
         public int GetNumberOfPlayers()
