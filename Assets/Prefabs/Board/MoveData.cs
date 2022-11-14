@@ -6,7 +6,8 @@
         {
             Start = start;
             Destination = destination;
-            Value = value;        }
+            Value = value;        
+        }
 
         public IField Start;
         public IField Destination;

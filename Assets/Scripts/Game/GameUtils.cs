@@ -110,17 +110,5 @@ namespace Assets.Scripts.Game
             return _board.CoordinatesToFields(availableCoordinates).ToList();
         }
 
-        public List<MoveData> FindMovesInDistance(List<MoveData> moves, int distance)
-        {
-            List<MoveData> movesInDistance= new List<MoveData>();
-
-            foreach(var move in moves)
-            {
-                if (CheckDistanceBetween(move.Start, move.Destination) == distance) movesInDistance.Add(move);
-            }
-
-            return movesInDistance;
-        }
-
     }
 }

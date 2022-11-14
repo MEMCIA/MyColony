@@ -24,7 +24,6 @@ public class BoardGame : MonoBehaviour
     BoardView _view;
     BoardAnimator _animator;
     Players _players;
-    GameObject _theEnd;
 
     IField _selectedPawnField;
     List<Move> _pendingMoves = new List<Move>();
@@ -33,14 +32,13 @@ public class BoardGame : MonoBehaviour
     {
         CurrentGame = this;
 
-        _theEnd = TheEnd.GetComponent<GameObject>();
         _animator = GetComponent<BoardAnimator>();
         _view = GetComponent<BoardView>();
         _view.OnFieldClicked.AddListener(OnFieldClicked);
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
 
-        // only highlight pawns of current player
+        // only highlight pawns of current playerF
         _view.PawnSelectionFilter = (IField field) =>
         {
             if (!IsCurrentPlayerHuman()) return false;
@@ -156,7 +154,6 @@ public class BoardGame : MonoBehaviour
 
     void HandleGameOver()
     {
-        TheEnd.enabled = true;
         TheEnd.gameObject.SetActive(true);
     }
 
