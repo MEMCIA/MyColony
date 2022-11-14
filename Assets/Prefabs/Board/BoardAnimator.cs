@@ -93,7 +93,7 @@ public class BoardAnimator : MonoBehaviour
         {
             var capturedField = _view.FieldViewForPosition(captured.Position);
             var pawnMaterial = capturedField.GetPawnMaterial();
-            var targetColor = capturedField.ColorForPlayer(move.Owner);
+            var targetColor = capturedField.Settings.ColorOfPlayer(move.Owner);
 
             var tween = pawnMaterial.DOColor(targetColor, CaptureSpeed);
             sequence.Insert(0, tween);
