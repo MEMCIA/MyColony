@@ -1,0 +1,73 @@
+name: Deploy dev
+
+on:
+  workflow_dispatch:
+  # push: { branches: [master] }
+
+jobs:
+  build:
+    name: Build project
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        targetPlatform:
+          - WebGL
+
+    env:
+      PROJECT_NAME: My Colony
+      ITCH_GAME: my-colony
+      ITCH_USER: Kaosumaru
+      ITCH_CHANNEL: dev
+
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      # Git LFS
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v2
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: ${{ env.ITCH_GAME }}-Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**/*.meta', 'Assets/**/*.cs') }}
+          restore-keys: |
+            ${{ env.ITCH_GAME }}-Library-${{ matrix.targetPlatform }}-
+            ${{ env.ITCH_GAME }}-Library-
+
+      # Build
+      - name: Build project
+        id: buildStep
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ${{ env.PROJECT_NAME }}
+
+#      - name: Upload to Itch
+#        uses: josephbmanley/butler-publish-itchio-action@master
+#        env:
+#          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+#          CHANNEL: ${{ env.ITCH_CHANNEL }}-${{ matrix.targetPlatform }}
+#          ITCH_GAME: ${{ env.ITCH_GAME }}
+#          ITCH_USER: ${{ env.ITCH_USER }}
+#          PACKAGE: build/${{ matrix.targetPlatform }}
+#          VERSION: ${{ steps.buildStep.outputs.buildVersion }}
