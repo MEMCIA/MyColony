@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldView : MonoBehaviour
@@ -12,7 +11,7 @@ public class FieldView : MonoBehaviour
     public MeshRenderer Field;
     public MeshRenderer Pawn;
 
-    public List<Color> PawnColors;
+    public GameVisualSettings Settings;
     public Color PawnSelectedColor = Color.white;
     public Material FieldHighlightedMaterial;
     public Material FieldTargetableMaterial;
@@ -33,11 +32,6 @@ public class FieldView : MonoBehaviour
         Refresh();
     }
 
-    public Color ColorForPlayer(int playerIndex)
-    {
-        return PawnColors[playerIndex % PawnColors.Count];
-    }
-
     public void HidePawn()
     {
         Pawn.gameObject.SetActive(false);
@@ -46,7 +40,7 @@ public class FieldView : MonoBehaviour
     public void ShowPawn(int playerIndex)
     {
         Pawn.gameObject.SetActive(true);
-        Pawn.material.color = ColorForPlayer(playerIndex);
+        Pawn.material.color = Settings.ColorOfPlayer(playerIndex);
     }
 
     public Material GetPawnMaterial()
@@ -63,7 +57,7 @@ public class FieldView : MonoBehaviour
         Pawn.gameObject.SetActive(pawn != null);
         if (pawn != null)
         {
-            Pawn.material.color = ColorForPlayer(pawn.Owner);
+            Pawn.material.color = Settings.ColorOfPlayer(pawn.Owner);
         }
     }
 
