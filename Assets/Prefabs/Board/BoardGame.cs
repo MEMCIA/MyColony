@@ -38,7 +38,7 @@ public class BoardGame : MonoBehaviour
         _view.OnPawnClicked.AddListener(OnPawnClicked);
 
 
-        // only highlight pawns of current playerF
+        // only highlight pawns of current player
         _view.PawnSelectionFilter = (IField field) =>
         {
             if (!IsCurrentPlayerHuman()) return false;
