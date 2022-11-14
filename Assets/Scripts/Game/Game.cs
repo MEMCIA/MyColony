@@ -12,9 +12,10 @@ namespace Assets.Scripts.Game
         GameUtils _utils;
         int _numberOfPlayers = 2;
         int _activePlayer = 0;
-        int _distanceInWhichPawnIsNotDeleted = 1;
+        public int DistanceInWhichPawnIsNotDeleted { get; private set; } = 1;
         bool _gameOver = false;
         int[] _pawnsOfPlayer;
+        string winner;
 
         public Game(IBoard board)
         {
@@ -48,7 +49,13 @@ namespace Assets.Scripts.Game
             }
             CalculateAmountOfPawns();
             CheckGameOver();
-            if (IsGameOver()) SetPawnOnFreeField();
+            if (IsGameOver())
+            {
+                while(!CheckIfAllFieldsAreOccupied())
+                {
+                    SetPawnOnFreeField();
+                }
+            }
         }
 
         public int GetNumberOfPlayers()
@@ -143,7 +150,7 @@ namespace Assets.Scripts.Game
 
         bool CheckIfStartPawnMustBeDeleted(int distanceBetween)
         {
-            if (distanceBetween > _distanceInWhichPawnIsNotDeleted) return true;
+            if (distanceBetween > DistanceInWhichPawnIsNotDeleted) return true;
             return false;
         }
 

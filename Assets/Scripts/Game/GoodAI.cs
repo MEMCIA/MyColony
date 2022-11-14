@@ -18,22 +18,10 @@ namespace Assets.Scripts.Game
         {
             List<MoveData> moveDataList = CreateMoveDataList(game);
             var moveDataListinOrder = moveDataList.OrderByDescending(x => x.Value).ToList();
-            List<MoveData> bestMoves = new List<MoveData> { moveDataListinOrder[0] };
-
-            for (int i = 2; i < moveDataListinOrder.Count; i++)
-            {
-                if (moveDataListinOrder[-1 + i].Value == moveDataListinOrder[-2 + i].Value)
-                {
-                    bestMoves.Add(moveDataListinOrder[-1 + i]);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
+            var firstBestMove = moveDataListinOrder[0];
+            List<MoveData> bestMoves = new List<MoveData>();
+            bestMoves = moveDataList.Where(move => move.Value == firstBestMove.Value).ToList();
             int randomIndex = Random.Range(0, bestMoves.Count);
-
             return bestMoves[randomIndex];
         }
 
@@ -49,7 +37,10 @@ namespace Assets.Scripts.Game
                 foreach (var target in availableMoves)
                 {
                     int numberOfFieldsWithEnemyPawns = game.Utils().FindEnemiesPawnsInNeighborhood(target, game.GetActivePlayer()).Count;
-                    moves.Add(new MoveData(start, target, numberOfFieldsWithEnemyPawns));
+                    int distanceFromStartPawn = game.Utils().CheckDistanceBetween(start, target);
+                    int pointsForNewPawn = distanceFromStartPawn == game.DistanceInWhichPawnIsNotDeleted ? 1 : 0;
+                    int value = numberOfFieldsWithEnemyPawns + pointsForNewPawn;
+                    moves.Add(new MoveData(start, target, value));
                 }
             }
 
