@@ -16,6 +16,8 @@ public class BoardGame : MonoBehaviour
     public static Mode CurrentMode { get; internal set; }
     public static BoardGame CurrentGame;
     public Text TheEnd;
+    public Text Winner;
+    public GameVisualSettings VisualSettings;
 
     public Vector2Int Dimensions = new Vector2Int(3, 3);
 
@@ -136,6 +138,8 @@ public class BoardGame : MonoBehaviour
         if (_animator.IsAnimating)
             return;
 
+        if (_game.IsGameOver()) return;
+
         // this will cause game to send OnMoveMade events, which will cause Move to be added to  _pendingMoves
         _game.Turn(start, target);
         // this will change turn to next player, if this player is an AI it will immediately make it's move
@@ -154,7 +158,19 @@ public class BoardGame : MonoBehaviour
 
     void HandleGameOver()
     {
+        while (!_game.CheckIfAllFieldsAreOccupied())
+        {
+            _game.SetPawnOfWinnerOnFreeField();
+        }
+
         TheEnd.gameObject.SetActive(true);
+        int numberOfWinner = _game.FindWinnerNumber();
+        Color colorOfWinner = VisualSettings.ColorOfPlayer(numberOfWinner);
+        var colorHtml = "#" + ColorUtility.ToHtmlStringRGB(colorOfWinner);
+        string nameOfPlayer = VisualSettings.NameOfPlayer(numberOfWinner).ToUpper();
+        string textToAdd = $"<color={colorHtml}>{ nameOfPlayer }</color> ";
+        Winner.text += textToAdd;
+        Winner.gameObject.SetActive(true);
     }
 
     void SetSelectedPawnField(IField field)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Game
         public int DistanceInWhichPawnIsNotDeleted { get; private set; } = 1;
         bool _gameOver = false;
         int[] _pawnsOfPlayer;
-        string winner;
+        int _winnerNumber;
 
         public Game(IBoard board)
         {
@@ -31,6 +32,12 @@ namespace Assets.Scripts.Game
             return _utils;
         }
 
+        public int FindWinnerNumber()
+        {
+            _winnerNumber = Array.IndexOf(_pawnsOfPlayer, _pawnsOfPlayer.Max());
+            return _winnerNumber;
+        }
+
         public bool IsGameOver()
         {
             return _gameOver;
@@ -43,19 +50,14 @@ namespace Assets.Scripts.Game
 
         public void Turn(IField start, IField target)
         {
+            if (IsGameOver()) return;
+
             if (MakeMove(start, target))
             {
                 if (!SetNextActivePlayer()) _gameOver = true;
             }
             CalculateAmountOfPawns();
             CheckGameOver();
-            if (IsGameOver())
-            {
-                while(!CheckIfAllFieldsAreOccupied())
-                {
-                    SetPawnOnFreeField();
-                }
-            }
         }
 
         public int GetNumberOfPlayers()
@@ -192,7 +194,7 @@ namespace Assets.Scripts.Game
             return fieldsInGame.Count();
         }
 
-        bool CheckIfAllFieldsAreOccupied()
+        public bool CheckIfAllFieldsAreOccupied()
         {
             int allFieldsInGame = GetFieldsNumberInGame();
             int numberOfPawn = CalculateAmountOfPawns();
@@ -245,6 +247,15 @@ namespace Assets.Scripts.Game
             if (emptyField == null) return;
             Vector2Int position = emptyField.Position;
             _board.PlacePawnAt(position, _activePlayer);
+        }
+
+        public void SetPawnOfWinnerOnFreeField()
+        {
+            IField emptyField = FindEmptyField();
+            if (emptyField == null) return;
+            Vector2Int position = emptyField.Position;
+            _board.PlacePawnAt(position, _winnerNumber);
+            Debug.Log(_winnerNumber);
         }
     }
 }
