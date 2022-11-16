@@ -15,8 +15,8 @@ jobs:
 
     env:
       PROJECT_NAME: My Colony
-      ITCH_GAME: my-colony
-      ITCH_USER: Kaosumaru
+      ITCH_GAME: mycolony
+      ITCH_USER: Memcia
       ITCH_CHANNEL: dev
 
     steps:
@@ -62,12 +62,12 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ${{ env.PROJECT_NAME }}
 
-#      - name: Upload to Itch
-#        uses: josephbmanley/butler-publish-itchio-action@master
-#        env:
-#          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-#          CHANNEL: ${{ env.ITCH_CHANNEL }}-${{ matrix.targetPlatform }}
-#          ITCH_GAME: ${{ env.ITCH_GAME }}
-#          ITCH_USER: ${{ env.ITCH_USER }}
-#          PACKAGE: build/${{ matrix.targetPlatform }}
-#          VERSION: ${{ steps.buildStep.outputs.buildVersion }}
+      - name: Upload to Itch
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: ${{ env.ITCH_CHANNEL }}-${{ matrix.targetPlatform }}
+          ITCH_GAME: ${{ env.ITCH_GAME }}
+          ITCH_USER: ${{ env.ITCH_USER }}
+          PACKAGE: build/${{ matrix.targetPlatform }}
+          VERSION: ${{ steps.buildStep.outputs.buildVersion }}
