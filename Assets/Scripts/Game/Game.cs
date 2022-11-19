@@ -32,9 +32,14 @@ namespace Assets.Scripts.Game
             return _utils;
         }
 
-        public int FindWinnerNumber()
+        int FindWinnerNumber()
         {
             _winnerNumber = Array.IndexOf(_pawnsOfPlayer, _pawnsOfPlayer.Max());
+            return _winnerNumber;
+        }
+
+        public int GetWinnerNumber()
+        {
             return _winnerNumber;
         }
 
@@ -50,7 +55,7 @@ namespace Assets.Scripts.Game
 
         public void Turn(IField start, IField target)
         {
-            if (IsGameOver()) return;
+            if (_gameOver && CheckIfAllFieldsAreOccupied()) return;
 
             if (MakeMove(start, target))
             {
@@ -58,6 +63,14 @@ namespace Assets.Scripts.Game
             }
             CalculateAmountOfPawns();
             CheckGameOver();
+            if (_gameOver)
+            {
+                while (!CheckIfAllFieldsAreOccupied())
+                {
+                    _winnerNumber = FindWinnerNumber();
+                    SetPawnOfWinnerOnFreeField();
+                }
+            }
         }
 
         public int GetNumberOfPlayers()
@@ -255,7 +268,6 @@ namespace Assets.Scripts.Game
             if (emptyField == null) return;
             Vector2Int position = emptyField.Position;
             _board.PlacePawnAt(position, _winnerNumber);
-            Debug.Log(_winnerNumber);
         }
     }
 }

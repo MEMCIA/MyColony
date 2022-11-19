@@ -158,13 +158,8 @@ public class BoardGame : MonoBehaviour
 
     void HandleGameOver()
     {
-        while (!_game.CheckIfAllFieldsAreOccupied())
-        {
-            _game.SetPawnOfWinnerOnFreeField();
-        }
-
         TheEnd.gameObject.SetActive(true);
-        int numberOfWinner = _game.FindWinnerNumber();
+        int numberOfWinner = _game.GetWinnerNumber();
         Color colorOfWinner = VisualSettings.ColorOfPlayer(numberOfWinner);
         var colorHtml = "#" + ColorUtility.ToHtmlStringRGB(colorOfWinner);
         string nameOfPlayer = VisualSettings.NameOfPlayer(numberOfWinner).ToUpper();
