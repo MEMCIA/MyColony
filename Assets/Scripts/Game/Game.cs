@@ -16,7 +16,7 @@ namespace Assets.Scripts.Game
         public int DistanceInWhichPawnIsNotDeleted { get; private set; } = 1;
         bool _gameOver = false;
         int[] _pawnsOfPlayer;
-        int _winnerNumber;
+        int _winnerIndex;
 
         public Game(IBoard board)
         {
@@ -34,8 +34,8 @@ namespace Assets.Scripts.Game
 
         public int FindWinnerNumber()
         {
-            _winnerNumber = Array.IndexOf(_pawnsOfPlayer, _pawnsOfPlayer.Max());
-            return _winnerNumber;
+            _winnerIndex = Array.IndexOf(_pawnsOfPlayer, _pawnsOfPlayer.Max());
+            return _winnerIndex;
         }
 
         public bool IsGameOver()
@@ -261,7 +261,7 @@ namespace Assets.Scripts.Game
             IField emptyField = FindEmptyField();
             if (emptyField == null) return;
             Vector2Int position = emptyField.Position;
-            _board.PlacePawnAt(position, _winnerNumber);
+            _board.PlacePawnAt(position, _winnerIndex);
         }
     }
 }
