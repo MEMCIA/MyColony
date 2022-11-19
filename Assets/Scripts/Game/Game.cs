@@ -32,14 +32,9 @@ namespace Assets.Scripts.Game
             return _utils;
         }
 
-        int FindWinnerNumber()
+        public int FindWinnerNumber()
         {
             _winnerNumber = Array.IndexOf(_pawnsOfPlayer, _pawnsOfPlayer.Max());
-            return _winnerNumber;
-        }
-
-        public int GetWinnerNumber()
-        {
             return _winnerNumber;
         }
 
@@ -67,7 +62,6 @@ namespace Assets.Scripts.Game
             {
                 while (!CheckIfAllFieldsAreOccupied())
                 {
-                    _winnerNumber = FindWinnerNumber();
                     SetPawnOfWinnerOnFreeField();
                 }
             }

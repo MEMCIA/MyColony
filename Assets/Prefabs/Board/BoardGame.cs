@@ -159,7 +159,7 @@ public class BoardGame : MonoBehaviour
     void HandleGameOver()
     {
         TheEnd.gameObject.SetActive(true);
-        int numberOfWinner = _game.GetWinnerNumber();
+        int numberOfWinner = _game.FindWinnerNumber();
         Color colorOfWinner = VisualSettings.ColorOfPlayer(numberOfWinner);
         var colorHtml = "#" + ColorUtility.ToHtmlStringRGB(colorOfWinner);
         string nameOfPlayer = VisualSettings.NameOfPlayer(numberOfWinner).ToUpper();
